@@ -4,7 +4,11 @@ import React from "react";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 
-export function Contact() {
+interface ContactProps {
+  onResumeClick: () => void;
+}
+
+export function Contact({ onResumeClick }: ContactProps) {
   return (
     <section
       id="contact"
@@ -105,10 +109,11 @@ export function Contact() {
             </p>
 
             <p style={{ margin: 0, marginTop: "24px" }}>
-              <a
-                href="/Megh_Pandya_Resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  onResumeClick();
+                }}
                 style={{
                   color: "var(--accent)",
                   fontFamily: "var(--font-mono)",
@@ -121,6 +126,8 @@ export function Contact() {
                   padding: "10px 18px",
                   borderRadius: "8px",
                   transition: "border-color 0.3s ease, background 0.3s ease",
+                  background: "transparent",
+                  cursor: "pointer",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = "var(--accent)";
@@ -132,7 +139,7 @@ export function Contact() {
                 }}
               >
                 Read full resume <ArrowUpRight size={14} />
-              </a>
+              </button>
             </p>
           </div>
         </motion.div>

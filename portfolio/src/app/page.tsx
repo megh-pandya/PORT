@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Landing } from "@/components/sections/Landing";
@@ -13,12 +13,14 @@ import { CursorSpotlight } from "@/components/ui/CursorSpotlight";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { ScrollTracker } from "@/components/ui/ScrollTracker";
 import { PageLoader } from "@/components/ui/PageLoader";
+import { ResumeModal } from "@/components/ui/ResumeModal";
 import { useCommandPalette } from "@/hooks/useCommandPalette";
 import { FocusSection } from "@/components/ui/FocusSection";
 import { ThemeProvider } from "@/context/ThemeContext";
 
 export default function Home() {
   const { isOpen, open, close } = useCommandPalette();
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
 
   return (
     <ThemeProvider>
@@ -34,11 +36,14 @@ export default function Home() {
       {/* Sticky Scroll Progress Tracker */}
       <ScrollTracker />
 
+      {/* Interactive Unfolding Resume Modal */}
+      <ResumeModal isOpen={isResumeOpen} onClose={() => setIsResumeOpen(false)} />
+
       {/* Global command palette overlay */}
       <CommandPalette isOpen={isOpen} onClose={close} />
 
       {/* Navigation */}
-      <Navbar onOpenCommandPalette={open} />
+      <Navbar onOpenCommandPalette={open} onResumeClick={() => setIsResumeOpen(true)} />
 
       {/* Page sections */}
       <main style={{ paddingTop: "60px", overflowX: "hidden" }}>
@@ -59,7 +64,7 @@ export default function Home() {
         </FocusSection>
         
         <FocusSection>
-          <Contact />
+          <Contact onResumeClick={() => setIsResumeOpen(true)} />
         </FocusSection>
       </main>
 

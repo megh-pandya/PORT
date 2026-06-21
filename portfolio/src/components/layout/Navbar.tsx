@@ -8,9 +8,10 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 interface NavbarProps {
   onOpenCommandPalette: () => void;
+  onResumeClick: () => void;
 }
 
-export function Navbar({ onOpenCommandPalette }: NavbarProps) {
+export function Navbar({ onOpenCommandPalette, onResumeClick }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { scrollY } = useScroll();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -128,6 +129,12 @@ export function Navbar({ onOpenCommandPalette }: NavbarProps) {
                   <a
                     key={item.href}
                     href={item.href}
+                    onClick={(e) => {
+                      if (item.label === "Resume") {
+                        e.preventDefault();
+                        onResumeClick();
+                      }
+                    }}
                     style={{
                       padding: "6px 12px",
                       borderRadius: "5px",
@@ -243,7 +250,13 @@ export function Navbar({ onOpenCommandPalette }: NavbarProps) {
               <a
                 key={item.href}
                 href={item.href}
-                onClick={() => setIsOpen(false)}
+                onClick={(e) => {
+                  if (item.label === "Resume") {
+                    e.preventDefault();
+                    onResumeClick();
+                  }
+                  setIsOpen(false);
+                }}
                 style={{
                   display: "block",
                   padding: "12px 0",
