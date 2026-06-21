@@ -148,7 +148,7 @@ export function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                   <FileText size={13} style={{ color: "var(--accent)" }} />
-                  <span>megh_pandya_resume_2026.pdf</span>
+                  <span>MEGH PANDYA (RESUME)</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "16px", pointerEvents: "auto" }}>
                   <a
