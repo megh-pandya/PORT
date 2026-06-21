@@ -121,7 +121,7 @@ export function CustomCursor() {
         translateX: "-50%",
         translateY: "-50%",
         pointerEvents: "none",
-        zIndex: 9999,
+        zIndex: 100000,
         borderRadius: "50%",
         border: "1px solid",
         display: "flex",
