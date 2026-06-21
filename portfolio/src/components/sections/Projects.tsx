@@ -523,6 +523,115 @@ export function Projects() {
                 </button>
               </motion.div>
             )}
+
+            {/* Project 3 (Left Aligned, Offset down) */}
+            {projectDossiers[2] && (
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+                style={{
+                  alignSelf: "flex-start",
+                  width: "100%",
+                  maxWidth: "580px",
+                  marginTop: "20px",
+                }}
+              >
+                <button
+                  onClick={() => setActive(projectDossiers[2])}
+                  aria-label={`Open case study for ${projectDossiers[2].title}`}
+                  id={`dossier-${projectDossiers[2].id}`}
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    padding: "48px",
+                    borderRadius: "16px",
+                    border: "1px solid var(--border)",
+                    backgroundColor: "var(--surface-alt)",
+                    textAlign: "left",
+                    cursor: "pointer",
+                    position: "relative",
+                    transition: "transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.4s, box-shadow 0.4s",
+                    boxShadow: "0 4px 30px rgba(0,0,0,0.02)",
+                  }}
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget;
+                    el.style.transform = "translateY(-8px)";
+                    el.style.borderColor = "var(--accent)";
+                    el.style.boxShadow = "0 20px 40px var(--accent-glow)";
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget;
+                    el.style.transform = "translateY(0px)";
+                    el.style.borderColor = "var(--border)";
+                    el.style.boxShadow = "0 4px 30px rgba(0,0,0,0.02)";
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: "11px",
+                      color: "var(--accent)",
+                      letterSpacing: "0.15em",
+                      textTransform: "uppercase",
+                      display: "block",
+                      marginBottom: "20px",
+                    }}
+                  >
+                    System · {projectDossiers[2].index}
+                  </span>
+                  <h3
+                    className="font-serif"
+                    style={{
+                      fontSize: "clamp(26px, 4vw, 36px)",
+                      fontWeight: 400,
+                      color: "var(--text)",
+                      lineHeight: 1.2,
+                      marginBottom: "14px",
+                    }}
+                  >
+                    {projectDossiers[2].title}
+                  </h3>
+                  <p
+                    style={{
+                      fontSize: "14px",
+                      color: "var(--text-sec)",
+                      lineHeight: 1.6,
+                      marginBottom: "28px",
+                    }}
+                  >
+                    {projectDossiers[2].tagline}
+                  </p>
+                  
+                  {/* Tech stack */}
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "36px" }}>
+                    {projectDossiers[2].techStack.map((tech) => (
+                      <span
+                        key={tech}
+                        style={{
+                          padding: "4px 10px",
+                          borderRadius: "4px",
+                          border: "1px solid var(--border)",
+                          background: "var(--surface)",
+                          fontSize: "11px",
+                          color: "var(--text-sec)",
+                          fontFamily: "var(--font-mono)",
+                        }}
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* CTA link */}
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--text)", letterSpacing: "0.08em" }}>
+                    <span>READ CASE STUDY</span>
+                    <ArrowRight size={12} style={{ color: "var(--accent)" }} />
+                  </div>
+                </button>
+              </motion.div>
+            )}
           </div>
         </div>
       </section>

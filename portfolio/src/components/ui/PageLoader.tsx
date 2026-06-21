@@ -112,17 +112,19 @@ export function PageLoader() {
             <h1
               className="font-serif"
               style={{
-                fontSize: "clamp(48px, 10vw, 140px)",
-                lineHeight: 0.9,
+                fontSize: "clamp(36px, 8vw, 84px)",
+                lineHeight: 0.95,
                 fontWeight: 400,
                 color: "var(--text)",
                 marginBottom: "24px",
-                letterSpacing: "-0.03em",
+                letterSpacing: "-0.02em",
               }}
             >
-              Portfolio
+              Welcome to the
               <br />
-              <em style={{ color: "var(--accent)" }}>System.</em>
+              Portfolio of
+              <br />
+              <em style={{ color: "var(--accent)" }}>Megh Pandya.</em>
             </h1>
 
             {/* Progress line */}

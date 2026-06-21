@@ -52,6 +52,26 @@ export const projectDossiers: ProjectDossier[] = [
     techStack: ["PHP", "MySQL", "phpMyAdmin", "HTML5", "CSS3", "Bootstrap"],
     github: "https://github.com/megh17/attendance-system",
   },
+  {
+    id: "portfolio",
+    index: "03",
+    title: "Personal Portfolio v2",
+    tagline: "A bespoke, premium, and recruiter-focused digital experience.",
+    problem:
+      "Traditional developer portfolios are often generic templates or over-designed OS simulations that distract recruiters from evaluating core software engineering skills and credentials.",
+    challenge:
+      "Designing a fast, high-performance, dark-mode-first digital product with smooth custom micro-animations (like a morphing trailing cursor and page loaders) while ensuring perfect SEO, accessibility, and zero hydration layout shifts.",
+    approach:
+      "Developed a custom Next.js App Router project leveraging Framer Motion for premium micro-animations. Styled with vanilla CSS variables for immediate rendering and layout stability. Curated a clean, focused, content-driven experience.",
+    solution:
+      "A fast, responsive, modern digital showcase featuring a custom count-up preloader, experiential section indicators, a responsive morphing trailing cursor, a unified command palette, and dark/light theme switching with seamless local storage persistence.",
+    result:
+      "A bespoke portfolio that successfully passes all Lighthouse audits, scores 100% build ready, and clearly showcases professional Next.js/React experience.",
+    lessons:
+      "Micro-animations require careful performance budgeting and device checks to avoid causing frame drops or poor mobile user experiences. Clean typography structure creates a stronger impact than heavy graphical features.",
+    techStack: ["Next.js", "React.js", "Framer Motion", "TypeScript", "Vanilla CSS", "Git"],
+    github: "https://github.com/megh-pandya/Portfolio",
+  },
 ];
 
 /* ── Tech Arsenal ────────────────────────────────────────── */
