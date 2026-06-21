@@ -10,6 +10,9 @@ import { Journey } from "@/components/sections/Journey";
 import { Contact } from "@/components/sections/Contact";
 import { CommandPalette } from "@/components/ui/CommandPalette";
 import { CursorSpotlight } from "@/components/ui/CursorSpotlight";
+import { CustomCursor } from "@/components/ui/CustomCursor";
+import { ScrollTracker } from "@/components/ui/ScrollTracker";
+import { PageLoader } from "@/components/ui/PageLoader";
 import { useCommandPalette } from "@/hooks/useCommandPalette";
 import { FocusSection } from "@/components/ui/FocusSection";
 import { ThemeProvider } from "@/context/ThemeContext";
@@ -19,8 +22,17 @@ export default function Home() {
 
   return (
     <ThemeProvider>
-      {/* Cursor spotlight — desktop only */}
+      {/* Premium Loader Sequence */}
+      <PageLoader />
+
+      {/* Trailing cursor overlay */}
+      <CustomCursor />
+
+      {/* Background spotlight — desktop only */}
       <CursorSpotlight />
+
+      {/* Sticky Scroll Progress Tracker */}
+      <ScrollTracker />
 
       {/* Global command palette overlay */}
       <CommandPalette isOpen={isOpen} onClose={close} />
@@ -55,4 +67,5 @@ export default function Home() {
     </ThemeProvider>
   );
 }
+
 

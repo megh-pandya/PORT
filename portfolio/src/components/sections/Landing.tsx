@@ -82,10 +82,7 @@ export function Landing() {
         </motion.p>
 
         {/* Name — large editorial serif */}
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.4, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+        <h1
           className="font-serif"
           style={{
             fontSize: "clamp(52px, 9vw, 120px)",
@@ -96,24 +93,37 @@ export function Landing() {
             letterSpacing: "-0.02em",
           }}
         >
-          Megh Pandya
-        </motion.h1>
+          <span className="mask-text-wrapper">
+            <motion.span
+              className="mask-text-line"
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.4, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            >
+              Megh Pandya
+            </motion.span>
+          </span>
+        </h1>
 
         {/* Role */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          style={{
-            fontSize: "clamp(16px, 2.4vw, 22px)",
-            color: "var(--text-sec)",
-            fontWeight: 400,
-            marginBottom: "32px",
-            letterSpacing: "0.01em",
-          }}
-        >
-          Full Stack Developer
-        </motion.p>
+        <div style={{ marginBottom: "32px" }}>
+          <span className="mask-text-wrapper">
+            <motion.p
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.2, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              style={{
+                fontSize: "clamp(16px, 2.4vw, 22px)",
+                color: "var(--text-sec)",
+                fontWeight: 400,
+                letterSpacing: "0.01em",
+                margin: 0,
+              }}
+            >
+              Full Stack Developer
+            </motion.p>
+          </span>
+        </div>
 
         {/* Divider */}
         <motion.div
@@ -129,22 +139,25 @@ export function Landing() {
         />
 
         {/* Mission statement */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          style={{
-            fontSize: "clamp(15px, 1.8vw, 18px)",
-            color: "var(--text-sec)",
-            maxWidth: "520px",
-            lineHeight: 1.65,
-            marginBottom: "52px",
-          }}
-        >
-          Building practical web systems — production dashboards, REST API
-          integrations, and full stack features that work reliably under real
-          traffic.
-        </motion.p>
+        <div style={{ marginBottom: "52px", maxWidth: "520px" }}>
+          <span className="mask-text-wrapper" style={{ display: "block" }}>
+            <motion.p
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.2, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              style={{
+                fontSize: "clamp(15px, 1.8vw, 18px)",
+                color: "var(--text-sec)",
+                lineHeight: 1.65,
+                margin: 0,
+              }}
+            >
+              Building practical web systems — production dashboards, REST API
+              integrations, and full stack features that work reliably under real
+              traffic.
+            </motion.p>
+          </span>
+        </div>
 
         {/* CTA */}
         <motion.div

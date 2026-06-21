@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { navItems } from "@/data/portfolio";
 import { Menu, X, Command } from "lucide-react";
@@ -14,10 +14,37 @@ export function Navbar({ onOpenCommandPalette }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { scrollY } = useScroll();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("about");
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setIsScrolled(latest > 50);
   });
+
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: "-40% 0px -40% 0px",
+      threshold: 0.1,
+    };
+
+    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersection, observerOptions);
+
+    const ids = ["about", "projects", "stack", "experience", "contact"];
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <>
@@ -95,32 +122,40 @@ export function Navbar({ onOpenCommandPalette }: NavbarProps) {
               aria-label="Main navigation"
               className="hidden-mobile"
             >
-              {navItems.map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  style={{
-                    padding: "6px 12px",
-                    borderRadius: "5px",
-                    fontSize: "13px",
-                    fontWeight: 400,
-                    color: "var(--text-sec)",
-                    textDecoration: "none",
-                    transition: "color 0.15s, background 0.15s",
-                    letterSpacing: "0.01em",
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.color = "var(--text)";
-                    (e.currentTarget as HTMLElement).style.background = "var(--surface-alt)";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.color = "var(--text-sec)";
-                    (e.currentTarget as HTMLElement).style.background = "transparent";
-                  }}
-                >
-                  {item.label}
-                </a>
-              ))}
+              {navItems.map((item) => {
+                const isActive = item.href === `#${activeSection}`;
+                return (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    style={{
+                      padding: "6px 12px",
+                      borderRadius: "5px",
+                      fontSize: "13px",
+                      fontWeight: isActive ? 600 : 400,
+                      color: isActive ? "var(--accent)" : "var(--text-sec)",
+                      background: isActive ? "var(--accent-dim)" : "transparent",
+                      textDecoration: "none",
+                      transition: "all 0.2s cubic-bezier(0.22, 1, 0.36, 1)",
+                      letterSpacing: "0.01em",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isActive) {
+                        (e.currentTarget as HTMLElement).style.color = "var(--text)";
+                        (e.currentTarget as HTMLElement).style.background = "var(--surface-alt)";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isActive) {
+                        (e.currentTarget as HTMLElement).style.color = "var(--text-sec)";
+                        (e.currentTarget as HTMLElement).style.background = "transparent";
+                      }
+                    }}
+                  >
+                    {item.label}
+                  </a>
+                );
+              })}
             </nav>
 
             {/* Right: Theme, Cmd Palette pill + Mobile toggle */}

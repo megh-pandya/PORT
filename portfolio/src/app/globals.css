@@ -14,6 +14,7 @@
   --accent-light: #D4845A;
   --accent-dim:   rgba(196,106,61,0.16);
   --accent-glow:  rgba(196,106,61,0.08);
+  --overlay-bg:   rgba(22, 19, 14, 0.94);
 
   color-scheme: dark;
 }
@@ -32,6 +33,7 @@
   --accent-light: #D4845A;
   --accent-dim:   rgba(196,106,61,0.12);
   --accent-glow:  rgba(196,106,61,0.06);
+  --overlay-bg:   rgba(245, 243, 238, 0.94);
 
   color-scheme: light;
 }
@@ -207,6 +209,24 @@ hr {
   border-top: 1px solid var(--border);
 }
 
+/* ── Custom Cursor Styles ────────────────────────────────── */
+@media (pointer: fine) {
+  html, body, a, button, select, input, textarea, [role="button"] {
+    cursor: none !important;
+  }
+}
+
+.mask-text-wrapper {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.mask-text-line {
+  display: inline-block;
+  will-change: transform;
+}
+
 /* ── Reduced Motion ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -216,3 +236,4 @@ hr {
     scroll-behavior: auto !important;
   }
 }
+
