@@ -1,29 +1,58 @@
+"use client";
+
+import React from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { Hero } from "@/components/sections/Hero";
-import { About } from "@/components/sections/About";
-import { Services } from "@/components/sections/Services";
-import { Skills } from "@/components/sections/Skills";
+import { Landing } from "@/components/sections/Landing";
 import { Projects } from "@/components/sections/Projects";
-import { Experience } from "@/components/sections/Experience";
-import { Achievements } from "@/components/sections/Achievements";
+import { TechArsenal } from "@/components/sections/TechArsenal";
+import { Journey } from "@/components/sections/Journey";
 import { Contact } from "@/components/sections/Contact";
+import { CommandPalette } from "@/components/ui/CommandPalette";
+import { CursorSpotlight } from "@/components/ui/CursorSpotlight";
+import { useCommandPalette } from "@/hooks/useCommandPalette";
+import { FocusSection } from "@/components/ui/FocusSection";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 export default function Home() {
+  const { isOpen, open, close } = useCommandPalette();
+
   return (
-    <>
-      <Navbar />
-      <main>
-        <Hero />
-        <About />
-        <Services />
-        <Skills />
-        <Projects />
-        <Experience />
-        <Achievements />
-        <Contact />
+    <ThemeProvider>
+      {/* Cursor spotlight — desktop only */}
+      <CursorSpotlight />
+
+      {/* Global command palette overlay */}
+      <CommandPalette isOpen={isOpen} onClose={close} />
+
+      {/* Navigation */}
+      <Navbar onOpenCommandPalette={open} />
+
+      {/* Page sections */}
+      <main style={{ paddingTop: "60px", overflowX: "hidden" }}>
+        <FocusSection>
+          <Landing />
+        </FocusSection>
+        
+        <FocusSection>
+          <Projects />
+        </FocusSection>
+        
+        <FocusSection>
+          <TechArsenal />
+        </FocusSection>
+        
+        <FocusSection>
+          <Journey />
+        </FocusSection>
+        
+        <FocusSection>
+          <Contact />
+        </FocusSection>
       </main>
+
       <Footer />
-    </>
+    </ThemeProvider>
   );
 }
+

@@ -1,177 +1,138 @@
-import { Code2, Zap, Plug, Smartphone, Brain, Rocket } from "lucide-react";
-import React from "react";
-import {
-  NavItem,
-  Stat,
-  AboutCard,
-  Service,
-  SkillGroup,
-  Project,
-  Experience,
-  Achievement,
-} from "../types";
+import { NavItem, ProjectDossier, TechItem, JourneyEntry } from "../types";
 
+/* ── Navigation ──────────────────────────────────────────── */
 export const navItems: NavItem[] = [
   { href: "#about", label: "About" },
-  { href: "#services", label: "Services" },
-  { href: "#skills", label: "Skills" },
-  { href: "#projects", label: "Projects" },
   { href: "#experience", label: "Experience" },
-  { href: "#contact", label: "Contact" },
+  { href: "#projects", label: "Projects" },
+  { href: "#stack", label: "Stack" },
+  { href: "/resume.pdf", label: "Resume" },
 ];
 
-export const stats: Stat[] = [
-  { value: "10+", label: "REST APIs Integrated" },
-  { value: "~40%", label: "Duplicate Code Reduced" },
-  { value: "8.53", label: "MCA CGPA" },
-  { value: "3", label: "Role-Based Dashboards" },
-];
-
-export const aboutCards: AboutCard[] = [
+/* ── Project Dossiers ────────────────────────────────────── */
+export const projectDossiers: ProjectDossier[] = [
   {
-    kicker: "01",
-    title: "Production-Focused Builder",
-    body: "I build and ship full stack features for real users, from role-based dashboards and REST API integrations to responsive UI workflows.",
-  },
-  {
-    kicker: "02",
-    title: "Performance Minded",
-    body: "I use lazy loading, dynamic imports, SSR strategies, and cleaner component structure to improve page speed and Core Web Vitals.",
-  },
-  {
-    kicker: "03",
-    title: "Clean Architecture",
-    body: "I focus on reusable components, maintainable code, API integration, and measurable delivery across frontend and backend layers.",
-  },
-];
-
-export const services: Service[] = [
-  {
-    icon: React.createElement(Code2),
-    title: "Full Stack Development",
-    description:
-      "End-to-end web application development with modern tech stack for scalable and performant solutions.",
-  },
-  {
-    icon: React.createElement(Zap),
-    title: "Performance Optimization",
-    description:
-      "Speed up your applications with lazy loading, code splitting, SSR strategies, and Core Web Vitals improvements.",
-  },
-  {
-    icon: React.createElement(Plug),
-    title: "API Integration",
-    description:
-      "Seamless REST API integration, authentication workflows, and real-time data synchronization.",
-  },
-  {
-    icon: React.createElement(Smartphone),
-    title: "Responsive Design",
-    description:
-      "Mobile-first design that looks perfect on all devices with intuitive user interfaces.",
-  },
-  {
-    icon: React.createElement(Brain),
-    title: "Clean Code",
-    description:
-      "Maintainable, scalable code architecture with proper structure, documentation, and best practices.",
-  },
-  {
-    icon: React.createElement(Rocket),
-    title: "Quick Turnaround",
-    description:
-      "Fast delivery without compromising quality. Efficient project completion with proven methodologies.",
-  },
-];
-
-export const skillGroups: SkillGroup[] = [
-  {
-    label: "Primary Stack",
-    skills: ["Next.js", "React.js", "Node.js", "Express.js", "PHP", "PostgreSQL"],
-  },
-  {
-    label: "Frontend & APIs",
-    skills: ["HTML5", "CSS3", "Tailwind CSS", "Bootstrap", "REST APIs", "AJAX"],
-  },
-  {
-    label: "Databases & Tools",
-    skills: ["MongoDB", "MySQL", "Git", "GitHub", "VS Code", "Postman", "Vercel"],
-  },
-  {
-    label: "Languages",
-    skills: ["JavaScript (ES6+)", "PHP", "Python", "Java", "C++"],
-  },
-  {
-    label: "Concepts",
-    skills: ["OOP", "DSA", "MVC", "Responsive Design", "API Integration", "Performance"],
-  },
-  {
-    label: "Exploring",
-    skills: ["TypeScript", "Docker", "AWS Basics"],
-    muted: true,
-  },
-];
-
-export const projects: Project[] = [
-  {
+    id: "seaneb",
+    index: "01",
     title: "Seaneb Real Estate Platform",
-    description:
-      "Live multi-role web platform for property search, listing management, business operations, dashboards, and real-time property data.",
-    stack: ["Next.js", "React.js", "Tailwind CSS", "REST APIs", "MySQL"],
-    tone: "blue",
+    tagline: "A live multi-role property platform built for real users.",
+    problem:
+      "A real estate business needed a unified web platform that let buyers search properties, agents manage listings, and admins oversee business operations — all in one place, live in production.",
+    challenge:
+      "Coordinating multiple user roles (buyer, agent, admin) with distinct dashboards, real-time property data, and secure authentication while maintaining fast page load times and mobile responsiveness under live traffic.",
+    approach:
+      "Adopted Next.js App Router with role-based routing and server-side data fetching. Built a shared reusable component library to minimize duplication across the three dashboards. Used lazy loading and dynamic imports to improve perceived performance.",
+    solution:
+      "Delivered property search, listing management, business operations, and three role-based dashboards. Integrated 10+ REST APIs covering property data, authentication, analytics, and subscription plans. Improved Core Web Vitals through SSR strategies, lazy loading, and image optimization.",
+    result:
+      "Platform is live at seaneb.com. Achieved significant reduction in duplicate code (~40%) through shared UI components. Improved mobile responsiveness and production bug fixes shipped under live traffic.",
+    lessons:
+      "Working on a live production codebase taught me to prioritize stability before speed — small, well-tested changes over sweeping rewrites. Real-world API integration has many edge cases that documentation never covers.",
+    techStack: ["Next.js", "React.js", "Tailwind CSS", "REST APIs", "MySQL", "Git"],
     live: "https://seaneb.com",
     github: "https://github.com/megh-pandya/SEANEB-REAL-ESTATE-1",
   },
   {
+    id: "attendance",
+    index: "02",
     title: "Attendance Management System",
-    description:
-      "Role-based attendance application for Admin, Faculty, and Student users with reports, data management, and export modules.",
-    stack: ["PHP", "MySQL", "phpMyAdmin"],
-    tone: "green",
+    tagline: "A role-based attendance platform for academic institutions.",
+    problem:
+      "Manual attendance tracking in academic institutions is error-prone, time-consuming, and makes report generation difficult. There was no centralized system for admins, faculty, and students to manage and view attendance data.",
+    challenge:
+      "Designing a clear separation of concerns between three user roles (Admin, Faculty, Student) with appropriate access controls, while keeping the interface simple enough for daily use by non-technical staff.",
+    approach:
+      "Built a PHP/MySQL backend with session-based authentication and role routing. Designed separate dashboard views for each role. Implemented report generation with export functionality for admins and faculty.",
+    solution:
+      "A complete web-based attendance system with: Admin dashboard (manage users, view all reports), Faculty dashboard (mark attendance, generate reports), Student dashboard (view own attendance records). Secure authentication, export modules, and data management tools.",
+    result:
+      "Fully functional system covering the complete attendance workflow from marking to reporting. Clean separation of admin, faculty, and student roles with secure login.",
+    lessons:
+      "This project reinforced the importance of user role separation at the routing and data layer, not just the UI level. Clean database schema design pays dividends when building reports.",
+    techStack: ["PHP", "MySQL", "phpMyAdmin", "HTML5", "CSS3", "Bootstrap"],
     github: "https://github.com/megh17/attendance-system",
-  },
-  {
-    title: "Personal Portfolio",
-    description:
-      "Modern responsive portfolio built with the Next.js App Router to centralize projects, skills, experience, and contact details.",
-    stack: ["Next.js", "Tailwind CSS", "Vercel"],
-    tone: "purple",
-    live: "https://meghpandya.dev",
   },
 ];
 
-export const experience: Experience[] = [
+/* ── Tech Arsenal ────────────────────────────────────────── */
+export const techArsenal: TechItem[] = [
+  // Frontend
+  { name: "Next.js", category: "frontend", note: "App Router, SSR, ISR — primary production stack at Seaneb" },
+  { name: "React.js", category: "frontend", note: "Component architecture, hooks, state management" },
+  { name: "Tailwind CSS", category: "frontend", note: "Utility-first styling, responsive design systems" },
+  { name: "JavaScript ES6+", category: "frontend", note: "Core language — async/await, modules, destructuring" },
+  { name: "HTML5", category: "frontend", note: "Semantic markup, accessibility, structure" },
+  { name: "CSS3", category: "frontend", note: "Flexbox, Grid, animations, responsive design" },
+  { name: "Bootstrap", category: "frontend", note: "Used in academic projects and legacy interfaces" },
+
+  // Backend
+  { name: "Node.js", category: "backend", note: "Server-side JavaScript, runtime environment" },
+  { name: "Express.js", category: "backend", note: "REST API development, routing, middleware" },
+  { name: "PHP", category: "backend", note: "Server-side scripting, used in Attendance Management System" },
+  { name: "REST APIs", category: "backend", note: "Integrated 10+ APIs — auth, analytics, property data" },
+  { name: "AJAX", category: "backend", note: "Async data fetching in legacy/PHP projects" },
+
+  // Database
+  { name: "MySQL", category: "database", note: "Relational DB — used at Seaneb and in academic projects" },
+  { name: "PostgreSQL", category: "database", note: "Studied and used in coursework" },
+  { name: "MongoDB", category: "database", note: "NoSQL — used in Node.js API projects" },
+  { name: "phpMyAdmin", category: "database", note: "Database administration for PHP/MySQL systems" },
+
+  // Tools
+  { name: "Git", category: "tools", note: "Version control, branching, collaborative workflows" },
+  { name: "GitHub", category: "tools", note: "Code hosting, pull requests, project management" },
+  { name: "VS Code", category: "tools", note: "Primary development environment" },
+  { name: "Postman", category: "tools", note: "API testing and documentation" },
+
+  // Deployment
+  { name: "Vercel", category: "deployment", note: "Next.js deployments, edge functions, preview URLs" },
+
+  // Exploring
+  { name: "TypeScript", category: "exploring", note: "Actively learning — strong typing, interfaces, generics" },
+  { name: "Docker", category: "exploring", note: "Containerization basics, development environments" },
+  { name: "AWS Basics", category: "exploring", note: "S3, EC2 fundamentals — in progress" },
+];
+
+/* ── Journey (Experience + Education) ───────────────────── */
+export const journeyEntries: JourneyEntry[] = [
   {
+    type: "work",
     role: "Full Stack Developer Intern",
-    company: "Seaneb Technologies",
-    date: "Dec 2025 - Apr 2026",
-    description:
-      "Built and shipped property listing, dashboard, and user-profile modules for a live Next.js platform. Integrated 10+ REST APIs, improved perceived page-load time with lazy loading, dynamic imports, and SSR strategies, and refactored shared UI components to cut duplicate code by about 40%.",
+    org: "Seaneb Technologies",
+    period: "Dec 2025 – Apr 2026",
+    summary:
+      "Built and shipped full stack features for a live Next.js real estate platform serving real users.",
+    highlights: [
+      "Built property listing, dashboard, and user-profile modules",
+      "Integrated 10+ REST APIs (authentication, analytics, subscription plans, property data)",
+      "Improved Core Web Vitals with lazy loading, dynamic imports, and SSR strategies",
+      "Refactored shared UI components — reduced duplicate code by ~40%",
+      "Improved mobile responsiveness across the platform",
+      "Fixed production bugs under live traffic",
+    ],
     tags: ["Next.js", "React.js", "Tailwind CSS", "REST APIs", "MySQL", "Git"],
   },
   {
+    type: "education",
     role: "Master of Computer Application (MCA)",
-    company: "ISTAR - CVM University",
-    date: "2024 - 2026",
-    description:
-      "Current MCA student with CGPA 8.53. Semester scores: SEM-1 7.50, SEM-2 8.40, and SEM-3 8.70.",
-    tags: ["MCA", "CGPA 8.53", "Software Development", "Web Technologies"],
+    org: "ISTAR — CVM University",
+    period: "2024 – 2026",
+    summary:
+      "Postgraduate program in computer applications with a focus on software development and web technologies.",
+    highlights: [
+      "Current CGPA: 8.53",
+      "SEM-1: 7.50 · SEM-2: 8.40 · SEM-3: 8.70",
+    ],
+    tags: ["MCA", "Software Development", "Web Technologies", "Databases"],
   },
   {
+    type: "education",
     role: "Bachelor of Computer Application (BCA)",
-    company: "SEMCOM - CVM University",
-    date: "2020 - 2023",
-    description:
-      "Completed BCA with CGPA 8.32, building a strong foundation in programming, databases, and web application development.",
-    tags: ["BCA", "CGPA 8.32", "Programming", "Databases"],
+    org: "SEMCOM — CVM University",
+    period: "2020 – 2023",
+    summary:
+      "Undergraduate program building a strong foundation in programming, databases, and web application development.",
+    highlights: ["Graduated with CGPA: 8.32"],
+    tags: ["BCA", "Programming", "Databases", "Web Development"],
   },
-];
-
-export const achievements: Achievement[] = [
-  { type: "Internship", title: "Production Next.js platform", org: "Seaneb Technologies", year: "2025-2026" },
-  { type: "API Work", title: "10+ REST API integrations", org: "Authentication, analytics, plans, and property data", year: "Live" },
-  { type: "Optimization", title: "Core Web Vitals improvements", org: "Lazy loading, dynamic imports, and SSR strategies", year: "Next.js" },
-  { type: "Refactor", title: "~40% duplicate code reduction", org: "Reusable shared UI component library", year: "Delivery" },
-  { type: "Academic", title: "MCA CGPA 8.53", org: "ISTAR - CVM University", year: "2024-2026" },
-  { type: "Academic", title: "BCA CGPA 8.32", org: "SEMCOM - CVM University", year: "2020-2023" },
 ];

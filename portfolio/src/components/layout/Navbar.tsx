@@ -1,80 +1,223 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import React, { useState } from "react";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { navItems } from "@/data/portfolio";
-import { cn } from "@/utils/cn";
-import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, Command } from "lucide-react";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
-export const Navbar = () => {
+interface NavbarProps {
+  onOpenCommandPalette: () => void;
+}
+
+export function Navbar({ onOpenCommandPalette }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const { scrollY } = useScroll();
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setIsScrolled(latest > 50);
+  });
 
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 flex h-16 items-center border-b border-transparent transition-all duration-300",
-        scrolled ? "bg-[#080c14]/80 backdrop-blur-xl border-white/10" : "bg-transparent"
-      )}
-    >
-      <div className="container mx-auto flex max-w-6xl items-center justify-between px-6">
-        <a href="#hero" className="text-xl font-bold tracking-tighter text-white" onClick={() => setIsOpen(false)}>
-          megh<span className="text-blue-500">.</span>dev
-        </a>
-
-        {/* Desktop Nav */}
-        <nav className="hidden items-center gap-1 md:flex">
-          {navItems.map((item) => (
+    <>
+      <motion.div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 50,
+          display: "flex",
+          justifyContent: "center",
+          paddingTop: "24px",
+          pointerEvents: "none",
+        }}
+      >
+        <motion.header
+          initial={false}
+          animate={{
+            width: isScrolled ? "100%" : "calc(100% - 48px)",
+            maxWidth: isScrolled ? "100%" : "900px",
+            y: isScrolled ? -24 : 0,
+            borderRadius: isScrolled ? "0px" : "16px",
+            backgroundColor: isScrolled ? "var(--bg)" : "var(--surface)",
+            borderColor: isScrolled ? "transparent" : "var(--border)",
+            borderBottomColor: isScrolled ? "var(--border)" : "var(--border)",
+          }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          style={{
+            pointerEvents: "auto",
+            display: "flex",
+            alignItems: "center",
+            height: "60px",
+            border: "1px solid",
+            padding: "0 24px",
+            boxShadow: isScrolled
+              ? "0 4px 20px rgba(0,0,0,0.03)"
+              : "0 10px 40px rgba(0,0,0,0.08)",
+          }}
+        >
+          <div
+            style={{
+              width: "100%",
+              maxWidth: "900px",
+              margin: "0 auto",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            {/* Logo */}
             <a
-              key={item.href}
-              href={item.href}
-              className="rounded-lg px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
+              href="#about"
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "14px",
+                fontWeight: 600,
+                color: "var(--text)",
+                textDecoration: "none",
+                letterSpacing: "0.02em",
+              }}
+              onClick={() => setIsOpen(false)}
             >
-              {item.label}
+              megh
+              <span style={{ color: "var(--accent)" }}>.</span>
             </a>
-          ))}
-        </nav>
 
-        <a
-          href="#contact"
-          className="hidden rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-bold text-white transition-all hover:bg-blue-700 md:block"
-        >
-          Hire Me
-        </a>
+            {/* Desktop Nav */}
+            <nav
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "4px",
+              }}
+              aria-label="Main navigation"
+              className="hidden-mobile"
+            >
+              {navItems.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  style={{
+                    padding: "6px 12px",
+                    borderRadius: "5px",
+                    fontSize: "13px",
+                    fontWeight: 400,
+                    color: "var(--text-sec)",
+                    textDecoration: "none",
+                    transition: "color 0.15s, background 0.15s",
+                    letterSpacing: "0.01em",
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.color = "var(--text)";
+                    (e.currentTarget as HTMLElement).style.background = "var(--surface-alt)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.color = "var(--text-sec)";
+                    (e.currentTarget as HTMLElement).style.background = "transparent";
+                  }}
+                >
+                  {item.label}
+                </a>
+              ))}
+            </nav>
 
-        {/* Mobile Toggle */}
-        <button
-          className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white md:hidden"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle menu"
-        >
-          {isOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
-      </div>
+            {/* Right: Theme, Cmd Palette pill + Mobile toggle */}
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <ThemeToggle />
 
-      {/* Mobile Nav */}
+              <button
+                onClick={onOpenCommandPalette}
+                id="cmd-palette-trigger"
+                aria-label="Open command palette"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  padding: "5px 10px",
+                  borderRadius: "5px",
+                  border: "1px solid var(--border)",
+                  background: "var(--surface-alt)",
+                  cursor: "pointer",
+                  fontSize: "11px",
+                  fontFamily: "var(--font-mono)",
+                  color: "var(--text-sec)",
+                  transition: "all 0.15s",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.borderColor = "var(--accent)";
+                  (e.currentTarget as HTMLElement).style.color = "var(--accent)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
+                  (e.currentTarget as HTMLElement).style.color = "var(--text-sec)";
+                }}
+              >
+                <Command size={11} />
+                <span className="hidden-mobile">K</span>
+              </button>
+
+              {/* Mobile menu toggle */}
+              <button
+                className="hidden-desktop"
+                onClick={() => setIsOpen((v) => !v)}
+                aria-label="Toggle navigation menu"
+                aria-expanded={isOpen}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "34px",
+                  height: "34px",
+                  borderRadius: "5px",
+                  border: "1px solid var(--border)",
+                  background: "var(--surface-alt)",
+                  cursor: "pointer",
+                  color: "var(--text)",
+                }}
+              >
+                {isOpen ? <X size={16} /> : <Menu size={16} />}
+              </button>
+            </div>
+          </div>
+        </motion.header>
+      </motion.div>
+
+      {/* Mobile Nav Drawer */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute inset-x-0 top-[65px] flex flex-col border-b border-white/10 bg-[#080c14] p-6 shadow-2xl md:hidden"
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
+            style={{
+              position: "fixed",
+              top: "60px",
+              left: 0,
+              right: 0,
+              background: "var(--bg)",
+              borderBottom: "1px solid var(--border)",
+              padding: "12px 24px 20px",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
+              zIndex: 40,
+            }}
           >
             {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
                 onClick={() => setIsOpen(false)}
-                className="py-3 text-sm font-medium text-slate-300 border-b border-white/5 last:border-0 hover:text-white"
+                style={{
+                  display: "block",
+                  padding: "12px 0",
+                  borderBottom: "1px solid var(--border)",
+                  fontSize: "15px",
+                  color: "var(--text)",
+                  textDecoration: "none",
+                  fontWeight: 400,
+                }}
               >
                 {item.label}
               </a>
@@ -82,6 +225,17 @@ export const Navbar = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+
+      <style>{`
+        @media (min-width: 640px) {
+          .hidden-mobile { display: flex !important; }
+          .hidden-desktop { display: none !important; }
+        }
+        @media (max-width: 639px) {
+          .hidden-mobile { display: none !important; }
+          .hidden-desktop { display: flex !important; }
+        }
+      `}</style>
+    </>
   );
-};
+}

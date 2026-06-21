@@ -1,53 +1,63 @@
 import { ReactNode } from "react";
 
+/* ── Navigation ──────────────────────────────────────────── */
 export interface NavItem {
   href: string;
   label: string;
 }
 
+/* ── Project Dossier ─────────────────────────────────────── */
+export interface ProjectDossier {
+  id: string;
+  index: string;
+  title: string;
+  tagline: string;
+  problem: string;
+  challenge: string;
+  approach: string;
+  solution: string;
+  result: string;
+  lessons: string;
+  techStack: string[];
+  live?: string;
+  github?: string;
+}
+
+/* ── Tech Arsenal ────────────────────────────────────────── */
+export interface TechItem {
+  name: string;
+  category: "frontend" | "backend" | "database" | "tools" | "deployment" | "exploring";
+  note: string;
+}
+
+/* ── Experience / Education ──────────────────────────────── */
+export interface JourneyEntry {
+  type: "work" | "education";
+  role: string;
+  org: string;
+  period: string;
+  summary: string;
+  highlights: string[];
+  tags: string[];
+}
+
+/* ── Command Palette ─────────────────────────────────────── */
+export interface CommandAction {
+  id: string;
+  label: string;
+  description: string;
+  icon: ReactNode;
+  action: () => void;
+}
+
+/* ── Legacy types kept for compatibility ─────────────────── */
 export interface Stat {
   value: string;
   label: string;
-}
-
-export interface AboutCard {
-  kicker: string;
-  title: string;
-  body: string;
-}
-
-export interface Service {
-  icon: ReactNode;
-  title: string;
-  description: string;
 }
 
 export interface SkillGroup {
   label: string;
   skills: string[];
   muted?: boolean;
-}
-
-export interface Project {
-  title: string;
-  description: string;
-  stack: string[];
-  tone: "blue" | "green" | "orange" | "purple";
-  live?: string;
-  github?: string;
-}
-
-export interface Experience {
-  role: string;
-  company: string;
-  date: string;
-  description: string;
-  tags: string[];
-}
-
-export interface Achievement {
-  type: string;
-  title: string;
-  org: string;
-  year: string;
 }
