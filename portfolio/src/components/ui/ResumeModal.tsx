@@ -74,7 +74,7 @@ export function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: "rgba(22, 19, 14, 0.75)",
+              backgroundColor: "var(--overlay-bg)",
               backdropFilter: "blur(8px)",
               WebkitBackdropFilter: "blur(8px)",
               padding: "24px",
@@ -148,7 +148,7 @@ export function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                   <FileText size={13} style={{ color: "var(--accent)" }} />
-                  <span>MEGH PANDYA (RESUME)</span>
+                  <span>MEGH PANDYA(RESUME)</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "16px", pointerEvents: "auto" }}>
                   <a

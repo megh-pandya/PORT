@@ -78,7 +78,7 @@ export function Landing() {
             textTransform: "uppercase",
           }}
         >
-          megh.dev — software engineer
+          MEGH.DEV - FULL STACK DEVELOPER
         </motion.p>
 
         {/* Name — large editorial serif */}

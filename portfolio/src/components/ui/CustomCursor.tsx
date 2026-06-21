@@ -128,10 +128,10 @@ export function CustomCursor() {
         alignItems: "center",
         justifyContent: "center",
         overflow: "hidden",
-        mixBlendMode: hoverState === "hover" ? "normal" : "difference",
+        mixBlendMode: "normal",
         willChange: "transform, width, height",
         opacity: isVisible ? 1 : 0,
-        transition: "opacity 0.2s ease, mix-blend-mode 0.2s ease",
+        transition: "opacity 0.2s ease",
       }}
       animate={getCursorVariants()}
       transition={{ type: "spring", stiffness: 500, damping: 30, mass: 0.2 }}

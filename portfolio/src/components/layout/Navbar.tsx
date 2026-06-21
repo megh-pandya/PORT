@@ -99,18 +99,22 @@ export function Navbar({ onOpenCommandPalette, onResumeClick }: NavbarProps) {
             {/* Logo */}
             <a
               href="#about"
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "14px",
-                fontWeight: 600,
-                color: "var(--text)",
-                textDecoration: "none",
-                letterSpacing: "0.02em",
-              }}
+              style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}
               onClick={() => setIsOpen(false)}
             >
-              megh
-              <span style={{ color: "var(--accent)" }}>.</span>
+              <img src="/MP-logo.png" alt="MP Logo" style={{ width: "36px", height: "auto", objectFit: "contain" }} />
+              <span
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  color: "var(--text)",
+                  letterSpacing: "0.02em",
+                }}
+                className="hidden-mobile"
+              >
+                MEGH.DEV - FULL STACK DEVELOPER
+              </span>
             </a>
 
             {/* Desktop Nav */}

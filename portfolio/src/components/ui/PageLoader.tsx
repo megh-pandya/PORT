@@ -93,7 +93,7 @@ export function PageLoader() {
               textTransform: "uppercase",
             }}
           >
-            <span>megh.dev</span>
+            <span>MEGH.DEV</span>
             <span>Est. 2026</span>
           </div>
 
