@@ -1,91 +1,18 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 
 export function FilmGrain() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [isMobile, setIsMobile] = useState(true);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 768px)");
-    setIsMobile(mq.matches);
-
-    const checkMobile = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener("change", checkMobile);
-
-    return () => mq.removeEventListener("change", checkMobile);
-  }, []);
-
-  useEffect(() => {
-    if (isMobile) return;
-
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-
-    const resize = () => {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
-    };
-    window.addEventListener("resize", resize);
-
-    let rafId: number;
-    let frameCount = 0;
-
-    const render = () => {
-      // Regenerate every 2 frames for a classic analog film feel
-      if (frameCount % 2 === 0) {
-        // Draw noise
-        const imageData = ctx.createImageData(width, height);
-        const data = imageData.data;
-        
-        for (let i = 0; i < data.length; i += 4) {
-          // Monochrome noise
-          const val = Math.random() * 255;
-          data[i] = val;     // red
-          data[i + 1] = val; // green
-          data[i + 2] = val; // blue
-          data[i + 3] = 255; // alpha (opaque here, canvas is transparent)
-        }
-        
-        ctx.putImageData(imageData, 0, 0);
-      }
-
-      frameCount++;
-      rafId = requestAnimationFrame(render);
-    };
-
-    rafId = requestAnimationFrame(render);
-
-    return () => {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener("resize", resize);
-    };
-  }, [isMobile]);
-
-  if (isMobile) return null;
-
   return (
-    <canvas
-      ref={canvasRef}
+    <div
       style={{
         position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
+        inset: 0,
         pointerEvents: "none",
         zIndex: 9999,
-        opacity: 0.035,
-        mixBlendMode: "screen", // gives it a nice light grain look over dark bg
+        backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E\")",
+        opacity: 0.05,
+        mixBlendMode: "screen",
       }}
       aria-hidden="true"
     />

@@ -15,11 +15,12 @@ export function Navbar({ onOpenCommandPalette }: NavbarProps) {
   const { scrollY, scrollYProgress } = useScroll();
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("about");
+  const [hoveredNavItem, setHoveredNavItem] = useState<string | null>(null);
 
   const [logoHovered, setLogoHovered] = useState(false);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-    setIsScrolled(latest > 80);
+    setIsScrolled(latest > 20);
   });
 
   useEffect(() => {
@@ -81,32 +82,37 @@ export function Navbar({ onOpenCommandPalette }: NavbarProps) {
           right: 0,
           zIndex: 50,
           pointerEvents: "none",
+          display: "flex",
+          justifyContent: "center",
+          paddingTop: "24px",
         }}
       >
         <motion.header
           initial={false}
           animate={{
-            backgroundColor: isScrolled ? "rgba(0, 0, 0, 0.55)" : "transparent",
-            backdropFilter: isScrolled ? "blur(20px) saturate(180%)" : "none",
-            borderBottomColor: isScrolled ? "rgba(255,255,255,0.06)" : "transparent",
-            boxShadow: isScrolled ? "0 4px 30px rgba(0, 0, 0, 0.1)" : "none",
+            backgroundColor: isScrolled ? "var(--overlay-bg)" : "rgba(0, 0, 0, 0)",
+            backdropFilter: isScrolled ? "blur(12px)" : "none",
+            borderColor: isScrolled ? "var(--border)" : "rgba(0, 0, 0, 0)",
+            boxShadow: isScrolled ? "0 8px 32px rgba(0, 0, 0, 0.1)" : "none",
+            padding: isScrolled ? "0 20px" : "0 24px",
           }}
           transition={{ duration: 0.4, ease: "easeInOut" }}
           style={{
             pointerEvents: "auto",
             display: "flex",
             alignItems: "center",
-            height: "70px",
-            borderBottom: "1px solid",
-            padding: "0 32px",
+            height: "64px",
+            border: "1px solid",
+            borderRadius: "100px",
+            width: "calc(100% - 48px)",
+            maxWidth: "1100px",
             position: "relative",
+            overflow: "hidden",
           }}
         >
           <div
             style={{
               width: "100%",
-              maxWidth: "1100px",
-              margin: "0 auto",
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
@@ -120,7 +126,7 @@ export function Navbar({ onOpenCommandPalette }: NavbarProps) {
               onMouseEnter={() => setLogoHovered(true)}
               onMouseLeave={() => setLogoHovered(false)}
             >
-              <img src="/MP-logo.png" alt="MP Logo" style={{ width: "32px", height: "auto", objectFit: "contain" }} />
+              <img src="/MP-logo.png" alt="MP Logo" style={{ width: "28px", height: "auto", objectFit: "contain" }} />
               
               <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }} className="hidden-mobile">
                 <div style={{ display: "flex", alignItems: "center", fontFamily: "var(--font-mono)", fontSize: "14px", fontWeight: 700, color: "var(--text)" }}>
@@ -130,7 +136,7 @@ export function Navbar({ onOpenCommandPalette }: NavbarProps) {
                       <motion.span
                         key={`m-${i}`}
                         animate={logoHovered ? { y: [0, -3, 0] } : { y: 0 }}
-                        transition={{ duration: 0.3, delay: i * 0.04, type: "spring", stiffness: 300 }}
+                        transition={{ duration: 0.4, delay: i * 0.04, ease: "easeInOut" }}
                         style={{ display: "inline-block" }}
                       >
                         {char}
@@ -158,7 +164,7 @@ export function Navbar({ onOpenCommandPalette }: NavbarProps) {
                       <motion.span
                         key={`d-${i}`}
                         animate={logoHovered ? { y: [0, -3, 0] } : { y: 0 }}
-                        transition={{ duration: 0.3, delay: (logoText.length + i) * 0.04, type: "spring", stiffness: 300 }}
+                        transition={{ duration: 0.4, delay: (logoText.length + i) * 0.04, ease: "easeInOut" }}
                         style={{ display: "inline-block" }}
                       >
                         {char}
@@ -188,48 +194,49 @@ export function Navbar({ onOpenCommandPalette }: NavbarProps) {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "32px",
+                gap: "8px",
               }}
               className="hidden-mobile"
+              onMouseLeave={() => setHoveredNavItem(null)}
             >
               {navItems.filter(item => item.label !== "Resume").map((item) => {
                 const isActive = item.href === `#${activeSection}`;
+                const isHovered = hoveredNavItem === item.href;
                 return (
-                  <div key={item.href} style={{ position: "relative" }}>
-                    {isActive && (
+                  <div 
+                    key={item.href} 
+                    style={{ position: "relative" }}
+                    onMouseEnter={() => setHoveredNavItem(item.href)}
+                  >
+                    {isHovered && (
                       <motion.div
-                        layoutId="activeNavDot"
+                        layoutId="navHover"
                         style={{
                           position: "absolute",
-                          top: "-12px",
-                          left: "50%",
-                          width: "4px",
-                          height: "4px",
-                          borderRadius: "50%",
-                          backgroundColor: "var(--accent)",
-                          boxShadow: "0 0 8px var(--accent)",
-                          transform: "translateX(-50%)",
+                          inset: 0,
+                          backgroundColor: "var(--accent-dim)",
+                          borderRadius: "20px",
+                          zIndex: 0,
                         }}
-                        animate={{ opacity: [0.5, 1, 0.5] }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
+                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
                       />
                     )}
                     <a
                       href={item.href}
-                      className="nav-link"
                       style={{
+                        position: "relative",
+                        zIndex: 1,
                         fontSize: "13px",
                         fontWeight: 500,
-                        color: isActive ? "#fff" : "rgba(255,255,255,0.5)",
+                        color: isActive ? "var(--text)" : "var(--text-sec)",
                         textDecoration: "none",
-                        letterSpacing: "0.02em",
-                        position: "relative",
+                        padding: "6px 14px",
                         display: "inline-block",
-                        padding: "4px 0",
+                        transition: "color 0.2s",
+                        letterSpacing: "0.02em",
                       }}
                     >
                       {item.label}
-                      <span className="nav-underline" />
                     </a>
                   </div>
                 );
@@ -241,24 +248,21 @@ export function Navbar({ onOpenCommandPalette }: NavbarProps) {
                   e.preventDefault();
                   window.dispatchEvent(new CustomEvent('open-resume'));
                 }}
-                rel="noopener noreferrer"
-                className="resume-btn"
+                className="resume-btn-modern"
                 style={{
                   padding: "8px 20px",
-                  borderRadius: "20px",
-                  border: "1px solid var(--accent)",
-                  color: "var(--accent)",
+                  borderRadius: "100px",
+                  backgroundColor: "var(--text)",
+                  color: "var(--surface)",
                   fontSize: "13px",
                   fontWeight: 600,
-                  textDecoration: "none",
-                  position: "relative",
-                  overflow: "hidden",
-                  display: "inline-block",
-                  letterSpacing: "0.02em",
+                  border: "none",
+                  cursor: "pointer",
+                  marginLeft: "8px",
+                  transition: "transform 0.2s, box-shadow 0.2s",
                 }}
               >
-                <span style={{ position: "relative", zIndex: 2 }}>Resume</span>
-                <span className="resume-fill" />
+                Resume
               </button>
             </nav>
 
@@ -274,20 +278,20 @@ export function Navbar({ onOpenCommandPalette }: NavbarProps) {
                   alignItems: "center",
                   gap: "6px",
                   padding: "6px 12px",
-                  borderRadius: "6px",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  background: "rgba(255,255,255,0.03)",
+                  borderRadius: "100px",
+                  border: "1px solid var(--border)",
+                  background: "var(--surface-alt)",
                   cursor: "pointer",
                   fontSize: "12px",
                   fontFamily: "var(--font-mono)",
                   color: "var(--text-sec)",
                   position: "relative",
                   overflow: "hidden",
+                  transition: "border-color 0.2s, color 0.2s",
                 }}
               >
                 <Command size={12} />
                 <span className="hidden-mobile">K</span>
-                <span className="cmd-scanline" />
               </button>
 
               {/* Mobile menu toggle */}
@@ -326,11 +330,12 @@ export function Navbar({ onOpenCommandPalette }: NavbarProps) {
               position: "absolute",
               bottom: 0,
               left: 0,
-              height: "1.5px",
+              height: "2px",
               backgroundColor: "var(--accent)",
               width: progressBarWidth,
               transformOrigin: "left",
               boxShadow: "0 0 10px var(--accent)",
+              zIndex: 10,
             }}
           />
         </motion.header>
@@ -350,9 +355,8 @@ export function Navbar({ onOpenCommandPalette }: NavbarProps) {
               right: 0,
               bottom: 0,
               width: "75%",
-              background: "rgba(10, 10, 15, 0.85)",
-              backdropFilter: "blur(24px) saturate(180%)",
-              borderLeft: "1px solid rgba(255,255,255,0.06)",
+              background: "var(--surface)",
+              borderLeft: "1px solid var(--border)",
               padding: "100px 32px 40px",
               zIndex: 40,
               display: "flex",
@@ -405,68 +409,19 @@ export function Navbar({ onOpenCommandPalette }: NavbarProps) {
           .hidden-desktop { display: flex !important; }
         }
 
-        /* Desktop Nav Link Hover */
-        .nav-link {
-          transition: color 0.3s ease, letter-spacing 0.3s ease;
-        }
-        .nav-link:hover {
-          color: #fff !important;
-          letter-spacing: 0.5px !important;
-        }
-        .nav-underline {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          height: 1px;
-          background-color: #fff;
-          transform: scaleX(0);
-          transform-origin: center;
-          transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .nav-link:hover .nav-underline {
-          transform: scaleX(1);
-        }
-
         /* Resume Button Organic Fill */
-        .resume-btn:hover {
-          color: #000 !important;
-          transform: translateY(-2px) scale(1.02);
-          border-color: transparent !important;
-          box-shadow: 0 0 0 2px var(--accent);
-          transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+        .resume-btn-modern:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px var(--accent-glow);
         }
-        .resume-btn:active {
+        .resume-btn-modern:active {
           transform: scale(0.96);
-        }
-        .resume-fill {
-          position: absolute;
-          inset: 0;
-          background-color: var(--accent);
-          clip-path: polygon(0 100%, 0 100%, 100% 100%, 100% 100%);
-          transition: clip-path 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-          z-index: 1;
-        }
-        .resume-btn:hover .resume-fill {
-          clip-path: polygon(0 0, 100% -20%, 100% 100%, -20% 100%);
         }
 
         /* CmdK Scanline */
         .cmd-btn:hover {
-          border-color: rgba(255,255,255,0.2) !important;
-          color: #fff !important;
-        }
-        .cmd-scanline {
-          position: absolute;
-          top: -100%;
-          left: 0;
-          right: 0;
-          height: 20px;
-          background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.2), transparent);
-          transition: top 0.2s linear;
-        }
-        .cmd-btn:hover .cmd-scanline {
-          top: 100%;
+          border-color: var(--text-sec) !important;
+          color: var(--text) !important;
         }
 
         /* Mobile Nav Link Hover */

@@ -34,7 +34,7 @@ function CtaButton({
   const primary: React.CSSProperties = {
     ...base,
     backgroundColor: "var(--text)",
-    color: "var(--bg)",
+    color: "var(--surface)",
     borderColor: "var(--text)",
   };
   const secondary: React.CSSProperties = {
@@ -50,6 +50,7 @@ function CtaButton({
     if (variant === "primary") {
       el.style.backgroundColor = "var(--accent)";
       el.style.borderColor = "var(--accent)";
+      el.style.color = "#fff";
     } else {
       el.style.borderColor = "var(--accent)";
       el.style.color = "var(--accent)";
@@ -61,7 +62,7 @@ function CtaButton({
     if (variant === "primary") {
       el.style.backgroundColor = "var(--text)";
       el.style.borderColor = "var(--text)";
-      el.style.color = "var(--bg)";
+      el.style.color = "var(--surface)";
     } else {
       el.style.borderColor = "var(--border)";
       el.style.color = "var(--text)";

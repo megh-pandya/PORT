@@ -17,13 +17,13 @@ export function CustomCursor() {
   const magOffsetY = useMotionValue(0);
 
   // Smooth spring for the cursor following mouse
-  const springConfig = { damping: 35, stiffness: 380, mass: 0.35 };
+  const springConfig = { damping: 25, stiffness: 800, mass: 0.05 };
   const cursorSpringX = useSpring(mouseX, springConfig);
   const cursorSpringY = useSpring(mouseY, springConfig);
 
   // Smooth spring for the magnetic pull
-  const magSpringX = useSpring(magOffsetX, { damping: 20, stiffness: 200, mass: 0.5 });
-  const magSpringY = useSpring(magOffsetY, { damping: 20, stiffness: 200, mass: 0.5 });
+  const magSpringX = useSpring(magOffsetX, { damping: 20, stiffness: 400, mass: 0.1 });
+  const magSpringY = useSpring(magOffsetY, { damping: 20, stiffness: 400, mass: 0.1 });
 
   const activeElementRef = useRef<HTMLElement | null>(null);
   const rafRef = useRef<number>(0);
