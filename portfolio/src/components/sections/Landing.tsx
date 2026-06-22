@@ -244,8 +244,7 @@ export function Landing() {
             View Projects <ArrowRight size={16} />
           </CtaButton>
           <CtaButton
-            onClick={(e) => {
-              if (e) e.preventDefault();
+            onClick={() => {
               window.dispatchEvent(new CustomEvent('open-resume'));
             }}
             variant="secondary"
