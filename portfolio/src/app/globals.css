@@ -2,19 +2,19 @@
 
 /* ── Dark Mode (default) ─────────────────────────────────── */
 :root {
-  --bg:           #16130E;
-  --surface:      #1E1A14;
-  --surface-alt:  #24201A;
-  --border:       #2E2A22;
-  --border-alt:   #3A352C;
-  --text:         #F0EDE6;
-  --text-sec:     #A8A29E;
-  --text-muted:   #6B6560;
-  --accent:       #C46A3D;
-  --accent-light: #D4845A;
-  --accent-dim:   rgba(196,106,61,0.16);
-  --accent-glow:  rgba(196,106,61,0.08);
-  --overlay-bg:   rgba(22, 19, 14, 0.94);
+  --bg:           transparent; /* Let the canvas show through */
+  --surface:      #0A0A0F;
+  --surface-alt:  #12121A;
+  --border:       #1E1E2E;
+  --border-alt:   #2A2A3E;
+  --text:         #F8FAFC;
+  --text-sec:     #94A3B8;
+  --text-muted:   #475569;
+  --accent:       #3B82F6;
+  --accent-light: #60A5FA;
+  --accent-dim:   rgba(59, 130, 246, 0.16);
+  --accent-glow:  rgba(59, 130, 246, 0.08);
+  --overlay-bg:   rgba(2, 2, 4, 0.94);
 
   color-scheme: dark;
 }

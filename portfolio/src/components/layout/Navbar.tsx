@@ -1,24 +1,25 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent, useTransform } from "framer-motion";
 import { navItems } from "@/data/portfolio";
 import { Menu, X, Command } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 interface NavbarProps {
   onOpenCommandPalette: () => void;
-  onResumeClick: () => void;
 }
 
-export function Navbar({ onOpenCommandPalette, onResumeClick }: NavbarProps) {
+export function Navbar({ onOpenCommandPalette }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const { scrollY } = useScroll();
+  const { scrollY, scrollYProgress } = useScroll();
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("about");
 
+  const [logoHovered, setLogoHovered] = useState(false);
+
   useMotionValueEvent(scrollY, "change", (latest) => {
-    setIsScrolled(latest > 50);
+    setIsScrolled(latest > 80);
   });
 
   useEffect(() => {
@@ -47,6 +48,29 @@ export function Navbar({ onOpenCommandPalette, onResumeClick }: NavbarProps) {
     return () => observer.disconnect();
   }, []);
 
+  const progressBarWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
+  const logoText = "MEGH";
+  const logoText2 = "DEV";
+
+  // Typewriter effect for subtitle
+  const subtitle = "FULL STACK DEVELOPER";
+  const [typedSubtitle, setTypedSubtitle] = useState("");
+  const [showSubtitleCursor, setShowSubtitleCursor] = useState(true);
+
+  useEffect(() => {
+    let i = 0;
+    const interval = setInterval(() => {
+      setTypedSubtitle(subtitle.substring(0, i + 1));
+      i++;
+      if (i === subtitle.length) {
+        clearInterval(interval);
+        setTimeout(() => setShowSubtitleCursor(false), 800);
+      }
+    }, 40); // Fast typewriter
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <>
       <motion.div
@@ -56,40 +80,32 @@ export function Navbar({ onOpenCommandPalette, onResumeClick }: NavbarProps) {
           left: 0,
           right: 0,
           zIndex: 50,
-          display: "flex",
-          justifyContent: "center",
-          paddingTop: "24px",
           pointerEvents: "none",
         }}
       >
         <motion.header
           initial={false}
           animate={{
-            width: isScrolled ? "100%" : "calc(100% - 48px)",
-            maxWidth: isScrolled ? "100%" : "900px",
-            y: isScrolled ? -24 : 0,
-            borderRadius: isScrolled ? "0px" : "16px",
-            backgroundColor: isScrolled ? "var(--bg)" : "var(--surface)",
-            borderColor: isScrolled ? "transparent" : "var(--border)",
-            borderBottomColor: isScrolled ? "var(--border)" : "var(--border)",
+            backgroundColor: isScrolled ? "rgba(0, 0, 0, 0.55)" : "transparent",
+            backdropFilter: isScrolled ? "blur(20px) saturate(180%)" : "none",
+            borderBottomColor: isScrolled ? "rgba(255,255,255,0.06)" : "transparent",
+            boxShadow: isScrolled ? "0 4px 30px rgba(0, 0, 0, 0.1)" : "none",
           }}
-          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.4, ease: "easeInOut" }}
           style={{
             pointerEvents: "auto",
             display: "flex",
             alignItems: "center",
-            height: "60px",
-            border: "1px solid",
-            padding: "0 24px",
-            boxShadow: isScrolled
-              ? "0 4px 20px rgba(0,0,0,0.03)"
-              : "0 10px 40px rgba(0,0,0,0.08)",
+            height: "70px",
+            borderBottom: "1px solid",
+            padding: "0 32px",
+            position: "relative",
           }}
         >
           <div
             style={{
               width: "100%",
-              maxWidth: "900px",
+              maxWidth: "1100px",
               margin: "0 auto",
               display: "flex",
               alignItems: "center",
@@ -99,22 +115,72 @@ export function Navbar({ onOpenCommandPalette, onResumeClick }: NavbarProps) {
             {/* Logo */}
             <a
               href="#about"
-              style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}
+              style={{ display: "flex", alignItems: "center", gap: "12px", textDecoration: "none" }}
               onClick={() => setIsOpen(false)}
+              onMouseEnter={() => setLogoHovered(true)}
+              onMouseLeave={() => setLogoHovered(false)}
             >
-              <img src="/MP-logo.png" alt="MP Logo" style={{ width: "36px", height: "auto", objectFit: "contain" }} />
-              <span
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  color: "var(--text)",
-                  letterSpacing: "0.02em",
-                }}
-                className="hidden-mobile"
-              >
-                MEGH.DEV - FULL STACK DEVELOPER
-              </span>
+              <img src="/MP-logo.png" alt="MP Logo" style={{ width: "32px", height: "auto", objectFit: "contain" }} />
+              
+              <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }} className="hidden-mobile">
+                <div style={{ display: "flex", alignItems: "center", fontFamily: "var(--font-mono)", fontSize: "14px", fontWeight: 700, color: "var(--text)" }}>
+                  {/* MEGH */}
+                  <div style={{ display: "flex" }}>
+                    {logoText.split("").map((char, i) => (
+                      <motion.span
+                        key={`m-${i}`}
+                        animate={logoHovered ? { y: [0, -3, 0] } : { y: 0 }}
+                        transition={{ duration: 0.3, delay: i * 0.04, type: "spring", stiffness: 300 }}
+                        style={{ display: "inline-block" }}
+                      >
+                        {char}
+                      </motion.span>
+                    ))}
+                  </div>
+
+                  {/* Dot */}
+                  <motion.span
+                    animate={{ scale: [1, 1.4, 1], opacity: [0.7, 1, 0.7] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    style={{
+                      margin: "0 4px",
+                      color: "var(--accent)",
+                      display: "inline-block",
+                      textShadow: "0 0 8px var(--accent)",
+                    }}
+                  >
+                    ·
+                  </motion.span>
+
+                  {/* DEV */}
+                  <div style={{ display: "flex" }}>
+                    {logoText2.split("").map((char, i) => (
+                      <motion.span
+                        key={`d-${i}`}
+                        animate={logoHovered ? { y: [0, -3, 0] } : { y: 0 }}
+                        transition={{ duration: 0.3, delay: (logoText.length + i) * 0.04, type: "spring", stiffness: 300 }}
+                        style={{ display: "inline-block" }}
+                      >
+                        {char}
+                      </motion.span>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Subtitle */}
+                <span
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "9px",
+                    color: "var(--text-sec)",
+                    letterSpacing: "0.1em",
+                    marginTop: "2px",
+                  }}
+                >
+                  {typedSubtitle}
+                  {showSubtitleCursor && <span style={{ opacity: 0.7 }}>|</span>}
+                </span>
+              </div>
             </a>
 
             {/* Desktop Nav */}
@@ -122,86 +188,106 @@ export function Navbar({ onOpenCommandPalette, onResumeClick }: NavbarProps) {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "4px",
+                gap: "32px",
               }}
-              aria-label="Main navigation"
               className="hidden-mobile"
             >
-              {navItems.map((item) => {
+              {navItems.filter(item => item.label !== "Resume").map((item) => {
                 const isActive = item.href === `#${activeSection}`;
                 return (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    onClick={(e) => {
-                      if (item.label === "Resume") {
-                        e.preventDefault();
-                        onResumeClick();
-                      }
-                    }}
-                    style={{
-                      padding: "6px 12px",
-                      borderRadius: "5px",
-                      fontSize: "13px",
-                      fontWeight: isActive ? 600 : 400,
-                      color: isActive ? "var(--accent)" : "var(--text-sec)",
-                      background: isActive ? "var(--accent-dim)" : "transparent",
-                      textDecoration: "none",
-                      transition: "all 0.2s cubic-bezier(0.22, 1, 0.36, 1)",
-                      letterSpacing: "0.01em",
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isActive) {
-                        (e.currentTarget as HTMLElement).style.color = "var(--text)";
-                        (e.currentTarget as HTMLElement).style.background = "var(--surface-alt)";
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isActive) {
-                        (e.currentTarget as HTMLElement).style.color = "var(--text-sec)";
-                        (e.currentTarget as HTMLElement).style.background = "transparent";
-                      }
-                    }}
-                  >
-                    {item.label}
-                  </a>
+                  <div key={item.href} style={{ position: "relative" }}>
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeNavDot"
+                        style={{
+                          position: "absolute",
+                          top: "-12px",
+                          left: "50%",
+                          width: "4px",
+                          height: "4px",
+                          borderRadius: "50%",
+                          backgroundColor: "var(--accent)",
+                          boxShadow: "0 0 8px var(--accent)",
+                          transform: "translateX(-50%)",
+                        }}
+                        animate={{ opacity: [0.5, 1, 0.5] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                      />
+                    )}
+                    <a
+                      href={item.href}
+                      className="nav-link"
+                      style={{
+                        fontSize: "13px",
+                        fontWeight: 500,
+                        color: isActive ? "#fff" : "rgba(255,255,255,0.5)",
+                        textDecoration: "none",
+                        letterSpacing: "0.02em",
+                        position: "relative",
+                        display: "inline-block",
+                        padding: "4px 0",
+                      }}
+                    >
+                      {item.label}
+                      <span className="nav-underline" />
+                    </a>
+                  </div>
                 );
               })}
+
+              {/* Resume Button */}
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.dispatchEvent(new CustomEvent('open-resume'));
+                }}
+                rel="noopener noreferrer"
+                className="resume-btn"
+                style={{
+                  padding: "8px 20px",
+                  borderRadius: "20px",
+                  border: "1px solid var(--accent)",
+                  color: "var(--accent)",
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  textDecoration: "none",
+                  position: "relative",
+                  overflow: "hidden",
+                  display: "inline-block",
+                  letterSpacing: "0.02em",
+                }}
+              >
+                <span style={{ position: "relative", zIndex: 2 }}>Resume</span>
+                <span className="resume-fill" />
+              </button>
             </nav>
 
-            {/* Right: Theme, Cmd Palette pill + Mobile toggle */}
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            {/* Right: Cmd Palette pill + Mobile toggle */}
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
               <ThemeToggle />
-
               <button
                 onClick={onOpenCommandPalette}
-                id="cmd-palette-trigger"
+                className="cmd-btn"
                 aria-label="Open command palette"
                 style={{
                   display: "flex",
                   alignItems: "center",
                   gap: "6px",
-                  padding: "5px 10px",
-                  borderRadius: "5px",
-                  border: "1px solid var(--border)",
-                  background: "var(--surface-alt)",
+                  padding: "6px 12px",
+                  borderRadius: "6px",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  background: "rgba(255,255,255,0.03)",
                   cursor: "pointer",
-                  fontSize: "11px",
+                  fontSize: "12px",
                   fontFamily: "var(--font-mono)",
                   color: "var(--text-sec)",
-                  transition: "all 0.15s",
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.borderColor = "var(--accent)";
-                  (e.currentTarget as HTMLElement).style.color = "var(--accent)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
-                  (e.currentTarget as HTMLElement).style.color = "var(--text-sec)";
+                  position: "relative",
+                  overflow: "hidden",
                 }}
               >
-                <Command size={11} />
+                <Command size={12} />
                 <span className="hidden-mobile">K</span>
+                <span className="cmd-scanline" />
               </button>
 
               {/* Mobile menu toggle */}
@@ -209,83 +295,188 @@ export function Navbar({ onOpenCommandPalette, onResumeClick }: NavbarProps) {
                 className="hidden-desktop"
                 onClick={() => setIsOpen((v) => !v)}
                 aria-label="Toggle navigation menu"
-                aria-expanded={isOpen}
                 style={{
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  width: "34px",
-                  height: "34px",
-                  borderRadius: "5px",
-                  border: "1px solid var(--border)",
-                  background: "var(--surface-alt)",
+                  width: "36px",
+                  height: "36px",
+                  borderRadius: "6px",
+                  border: "none",
+                  background: "transparent",
                   cursor: "pointer",
                   color: "var(--text)",
+                  position: "relative",
+                  zIndex: 60,
                 }}
               >
-                {isOpen ? <X size={16} /> : <Menu size={16} />}
+                <motion.div animate={isOpen ? { rotate: 90, opacity: 0 } : { rotate: 0, opacity: 1 }} style={{ position: "absolute" }}>
+                  <Menu size={20} />
+                </motion.div>
+                <motion.div animate={isOpen ? { rotate: 0, opacity: 1 } : { rotate: -90, opacity: 0 }} style={{ position: "absolute" }}>
+                  <X size={20} />
+                </motion.div>
               </button>
             </div>
           </div>
+
+          {/* Scroll Progress Bar */}
+          <motion.div
+            style={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              height: "1.5px",
+              backgroundColor: "var(--accent)",
+              width: progressBarWidth,
+              transformOrigin: "left",
+              boxShadow: "0 0 10px var(--accent)",
+            }}
+          />
         </motion.header>
       </motion.div>
 
-      {/* Mobile Nav Drawer */}
+      {/* Mobile Nav Drawer - Slides from RIGHT */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.2 }}
+            initial={{ opacity: 0, x: "100%" }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: "100%" }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             style={{
               position: "fixed",
-              top: "60px",
-              left: 0,
+              top: 0,
               right: 0,
-              background: "var(--bg)",
-              borderBottom: "1px solid var(--border)",
-              padding: "12px 24px 20px",
-              boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
+              bottom: 0,
+              width: "75%",
+              background: "rgba(10, 10, 15, 0.85)",
+              backdropFilter: "blur(24px) saturate(180%)",
+              borderLeft: "1px solid rgba(255,255,255,0.06)",
+              padding: "100px 32px 40px",
               zIndex: 40,
+              display: "flex",
+              flexDirection: "column",
+              gap: "24px",
             }}
           >
-            {navItems.map((item) => (
-              <a
+            {navItems.map((item, i) => (
+              <motion.a
                 key={item.href}
                 href={item.href}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.3, delay: i * 0.06 }}
                 onClick={(e) => {
                   if (item.label === "Resume") {
                     e.preventDefault();
-                    onResumeClick();
+                    setIsOpen(false);
+                    window.dispatchEvent(new CustomEvent('open-resume'));
+                  } else {
+                    setIsOpen(false);
                   }
-                  setIsOpen(false);
                 }}
+                className="mobile-nav-link"
                 style={{
                   display: "block",
-                  padding: "12px 0",
-                  borderBottom: "1px solid var(--border)",
-                  fontSize: "15px",
+                  fontSize: "18px",
                   color: "var(--text)",
                   textDecoration: "none",
-                  fontWeight: 400,
+                  fontWeight: 500,
+                  paddingLeft: "12px",
+                  borderLeft: "2px solid transparent",
                 }}
               >
                 {item.label}
-              </a>
+              </motion.a>
             ))}
           </motion.div>
         )}
       </AnimatePresence>
 
       <style>{`
-        @media (min-width: 640px) {
+        @media (min-width: 768px) {
           .hidden-mobile { display: flex !important; }
           .hidden-desktop { display: none !important; }
         }
-        @media (max-width: 639px) {
+        @media (max-width: 767px) {
           .hidden-mobile { display: none !important; }
           .hidden-desktop { display: flex !important; }
+        }
+
+        /* Desktop Nav Link Hover */
+        .nav-link {
+          transition: color 0.3s ease, letter-spacing 0.3s ease;
+        }
+        .nav-link:hover {
+          color: #fff !important;
+          letter-spacing: 0.5px !important;
+        }
+        .nav-underline {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background-color: #fff;
+          transform: scaleX(0);
+          transform-origin: center;
+          transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .nav-link:hover .nav-underline {
+          transform: scaleX(1);
+        }
+
+        /* Resume Button Organic Fill */
+        .resume-btn:hover {
+          color: #000 !important;
+          transform: translateY(-2px) scale(1.02);
+          border-color: transparent !important;
+          box-shadow: 0 0 0 2px var(--accent);
+          transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .resume-btn:active {
+          transform: scale(0.96);
+        }
+        .resume-fill {
+          position: absolute;
+          inset: 0;
+          background-color: var(--accent);
+          clip-path: polygon(0 100%, 0 100%, 100% 100%, 100% 100%);
+          transition: clip-path 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+          z-index: 1;
+        }
+        .resume-btn:hover .resume-fill {
+          clip-path: polygon(0 0, 100% -20%, 100% 100%, -20% 100%);
+        }
+
+        /* CmdK Scanline */
+        .cmd-btn:hover {
+          border-color: rgba(255,255,255,0.2) !important;
+          color: #fff !important;
+        }
+        .cmd-scanline {
+          position: absolute;
+          top: -100%;
+          left: 0;
+          right: 0;
+          height: 20px;
+          background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.2), transparent);
+          transition: top 0.2s linear;
+        }
+        .cmd-btn:hover .cmd-scanline {
+          top: 100%;
+        }
+
+        /* Mobile Nav Link Hover */
+        .mobile-nav-link {
+          transition: border-color 0.2s ease, padding-left 0.2s ease, color 0.2s ease;
+        }
+        .mobile-nav-link:hover {
+          border-color: var(--accent) !important;
+          padding-left: 16px !important;
+          color: var(--accent) !important;
         }
       `}</style>
     </>

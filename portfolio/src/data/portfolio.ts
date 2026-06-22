@@ -50,27 +50,49 @@ export const projectDossiers: ProjectDossier[] = [
     lessons:
       "This project reinforced the importance of user role separation at the routing and data layer, not just the UI level. Clean database schema design pays dividends when building reports.",
     techStack: ["PHP", "MySQL", "phpMyAdmin", "HTML5", "CSS3", "Bootstrap"],
-    github: "https://github.com/megh17/attendance-system",
+    github: "https://github.com/megh-pandya/attendance-system",
+  },
+
+  {
+    id: "uno",
+    index: "03",
+    title: "UNO Card Game",
+    tagline: "A real-time multiplayer UNO game with an AI opponent for Android & iOS.",
+    problem:
+      "Card game apps are either too simple with no AI challenge, or overly complex with poor mobile UX. Players wanted a polished UNO experience that works offline with an AI, and online with friends — all in one app.",
+    challenge:
+      "Implementing game logic for UNO's complex rule set (wild cards, draw-two chains, skip sequences) while also building a reactive turn-based AI that feels intelligent without being unfair. Cross-platform state sync for multiplayer added another layer of complexity.",
+    approach:
+      "Built in React Native for cross-platform (Android & iOS) reach. Designed a state machine for game flow, with the AI opponent using a weighted decision tree to prioritize card plays. Used a socket-based approach for real-time multiplayer game sync.",
+    solution:
+      "A fully playable UNO app with: single-player vs AI mode, local multiplayer, complete UNO rule enforcement (special cards, draw stacks, reverse, skip), animated card dealing and turn transitions, and a clean mobile-first UI.",
+    result:
+      "Fully functional cross-platform UNO game running on both Android and iOS. AI opponent provides a genuine challenge. Multiplayer mode allows real-time play between devices on the same session.",
+    lessons:
+      "Game development in React Native requires careful management of re-renders — every state change in a card game triggers UI updates that can cause jank. Batching state updates and memoizing components was essential for smooth 60fps gameplay.",
+    techStack: ["React Native", "JavaScript", "Android", "iOS", "Game Logic", "AI"],
+    github: "https://github.com/megh-pandya/UNO",
   },
   {
     id: "portfolio",
-    index: "03",
-    title: "Personal Portfolio v2",
-    tagline: "A bespoke, premium, and recruiter-focused digital experience.",
+    index: "04",
+    title: "Personal Portfolio",
+    tagline: "A premium, animated, and interactive personal web portfolio.",
     problem:
-      "Traditional developer portfolios are often generic templates or over-designed OS simulations that distract recruiters from evaluating core software engineering skills and credentials.",
+      "A standard text-based resume isn't enough to showcase modern web development skills. I needed a standout digital presence that demonstrates my ability to build highly interactive, beautiful, and performant user interfaces.",
     challenge:
-      "Designing a fast, high-performance, dark-mode-first digital product with smooth custom micro-animations (like a morphing trailing cursor and page loaders) while ensuring perfect SEO, accessibility, and zero hydration layout shifts.",
+      "Balancing heavy SVG animations, 3D CSS transforms, and canvas effects (like a realistic night sky and raining mountain backgrounds) without sacrificing page load performance or responsiveness across mobile devices.",
     approach:
-      "Developed a custom Next.js App Router project leveraging Framer Motion for premium micro-animations. Styled with vanilla CSS variables for immediate rendering and layout stability. Curated a clean, focused, content-driven experience.",
+      "Built with Next.js and React. Leveraged Framer Motion for complex scroll-linked animations and page transitions. Implemented strict component modularity to keep the codebase maintainable and clean.",
     solution:
-      "A fast, responsive, modern digital showcase featuring a custom count-up preloader, experiential section indicators, a responsive morphing trailing cursor, a unified command palette, and dark/light theme switching with seamless local storage persistence.",
+      "Developed a custom-built, premium dark-themed portfolio featuring a command palette, interactive digital constellation of my skills, a 3D folded-paper resume modal, and an immersive divine Lord Shiva blessing / mountain rain intro sequence.",
     result:
-      "A bespoke portfolio that successfully passes all Lighthouse audits, scores 100% build ready, and clearly showcases professional Next.js/React experience.",
+      "A lightning-fast, visually stunning portfolio that acts as a living demonstration of my frontend capabilities and attention to detail.",
     lessons:
-      "Micro-animations require careful performance budgeting and device checks to avoid causing frame drops or poor mobile user experiences. Clean typography structure creates a stronger impact than heavy graphical features.",
-    techStack: ["Next.js", "React.js", "Framer Motion", "TypeScript", "Vanilla CSS", "Git"],
-    github: "https://github.com/megh-pandya/Portfolio",
+      "Mastered the orchestration of multiple concurrent Framer Motion animations and learned how to optimize complex canvas-based backgrounds so they don't block the main thread.",
+    techStack: ["Next.js", "React.js", "Framer Motion", "TypeScript", "Tailwind CSS"],
+    live: "https://megh-portfolio-ten.vercel.app",
+    github: "https://github.com/megh-pandya/portfolio",
   },
 ];
 
@@ -141,8 +163,8 @@ export const journeyEntries: JourneyEntry[] = [
       "Postgraduate program in computer applications with a focus on software development and web technologies.",
     highlights: [
       "Current CGPA: 8.53",
-      "SEM-1: 7.50 · SEM-2: 8.40 · SEM-3: 8.70",
     ],
+
     tags: ["MCA", "Software Development", "Web Technologies", "Databases"],
   },
   {

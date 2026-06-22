@@ -1,64 +1,93 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export function CustomCursor() {
   const [mounted, setMounted] = useState(false);
-  const [hoverState, setHoverState] = useState<"normal" | "hover" | "view">("normal");
+  const [hoverState, setHoverState] = useState<"normal" | "hover" | "view" | "magnetic">("normal");
   const [isVisible, setIsVisible] = useState(false);
 
-  const cursorX = useMotionValue(-100);
-  const cursorY = useMotionValue(-100);
+  // Base cursor position (raw mouse)
+  const mouseX = useMotionValue(-200);
+  const mouseY = useMotionValue(-200);
 
-  const springConfig = { damping: 40, stiffness: 400, mass: 0.4 };
-  const cursorSpringX = useSpring(cursorX, springConfig);
-  const cursorSpringY = useSpring(cursorY, springConfig);
+  // Magnetic offset — how much the cursor is pulled toward an element
+  const magOffsetX = useMotionValue(0);
+  const magOffsetY = useMotionValue(0);
+
+  // Smooth spring for the cursor following mouse
+  const springConfig = { damping: 35, stiffness: 380, mass: 0.35 };
+  const cursorSpringX = useSpring(mouseX, springConfig);
+  const cursorSpringY = useSpring(mouseY, springConfig);
+
+  // Smooth spring for the magnetic pull
+  const magSpringX = useSpring(magOffsetX, { damping: 20, stiffness: 200, mass: 0.5 });
+  const magSpringY = useSpring(magOffsetY, { damping: 20, stiffness: 200, mass: 0.5 });
+
+  const activeElementRef = useRef<HTMLElement | null>(null);
+  const rafRef = useRef<number>(0);
 
   useEffect(() => {
-    const handle = requestAnimationFrame(() => {
-      setMounted(true);
-    });
+    const handle = requestAnimationFrame(() => setMounted(true));
     return () => cancelAnimationFrame(handle);
   }, []);
 
   useEffect(() => {
     const moveCursor = (e: MouseEvent) => {
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
       if (!isVisible) setIsVisible(true);
+
+      // If hovering a magnetic element, compute offset toward its center
+      if (activeElementRef.current) {
+        const rect = activeElementRef.current.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const dx = e.clientX - cx;
+        const dy = e.clientY - cy;
+        const strength = 0.35;
+        magOffsetX.set(-dx * strength);
+        magOffsetY.set(-dy * strength);
+      } else {
+        magOffsetX.set(0);
+        magOffsetY.set(0);
+      }
     };
 
     const handleMouseLeave = () => setIsVisible(false);
     const handleMouseEnter = () => setIsVisible(true);
 
-    // Event Delegation to detect hover types
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (!target) return;
 
-      // 1. Check if hovering inside a project dossier block
-      const isProject = target.closest("[id^='dossier-']") || target.closest(".project-card");
+      // Project card hover → VIEW state
+      const isProject =
+        target.closest("[id^='dossier-']") || target.closest(".project-card");
       if (isProject) {
         setHoverState("view");
+        activeElementRef.current = null;
         return;
       }
 
-      // 2. Check if hovering generic interactive controls
-      const isInteractive =
-        target.closest("a") ||
+      // Magnetic elements (buttons, links with data-magnetic, MagneticButton)
+      const magneticEl =
+        target.closest("[data-magnetic]") ||
         target.closest("button") ||
-        target.closest("input") ||
-        target.closest("textarea") ||
-        target.closest("select") ||
-        target.closest("[role='button']") ||
-        target.closest("#cmd-palette-trigger");
+        target.closest("a");
 
-      if (isInteractive) {
-        setHoverState("hover");
-      } else {
-        setHoverState("normal");
+      if (magneticEl) {
+        activeElementRef.current = magneticEl as HTMLElement;
+        setHoverState("magnetic");
+        return;
       }
+
+      // Reset
+      activeElementRef.current = null;
+      magOffsetX.set(0);
+      magOffsetY.set(0);
+      setHoverState("normal");
     };
 
     window.addEventListener("mousemove", moveCursor, { passive: true });
@@ -71,41 +100,50 @@ export function CustomCursor() {
       document.removeEventListener("mouseleave", handleMouseLeave);
       document.removeEventListener("mouseenter", handleMouseEnter);
       window.removeEventListener("mouseover", handleMouseOver);
+      cancelAnimationFrame(rafRef.current);
     };
-  }, [cursorX, cursorY, isVisible]);
+  }, [mouseX, mouseY, magOffsetX, magOffsetY, isVisible]);
 
   if (!mounted) return null;
 
-  // Only render on devices with fine pointer (mouse/trackpad)
-  const isFinePointer = typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches;
+  const isFinePointer =
+    typeof window !== "undefined" &&
+    window.matchMedia("(pointer: fine)").matches;
   if (!isFinePointer) return null;
 
-  const getCursorVariants = () => {
+  const getCursorSize = () => {
+    switch (hoverState) {
+      case "view":
+        return { width: 72, height: 72 };
+      case "magnetic":
+        return { width: 44, height: 44 };
+      case "normal":
+      default:
+        return { width: 8, height: 8 };
+    }
+  };
+
+  const getCursorStyle = () => {
     switch (hoverState) {
       case "view":
         return {
-          width: 72,
-          height: 72,
           backgroundColor: "var(--accent)",
           borderColor: "var(--accent)",
-          color: "var(--bg)",
+          borderRadius: "50%",
         };
-      case "hover":
+      case "magnetic":
         return {
-          width: 38,
-          height: 38,
           backgroundColor: "transparent",
           borderColor: "var(--accent)",
-          color: "transparent",
+          // Squash to pill shape slightly
+          borderRadius: "40%",
         };
       case "normal":
       default:
         return {
-          width: 8,
-          height: 8,
           backgroundColor: "var(--text)",
           borderColor: "var(--text)",
-          color: "transparent",
+          borderRadius: "50%",
         };
     }
   };
@@ -122,19 +160,20 @@ export function CustomCursor() {
         translateY: "-50%",
         pointerEvents: "none",
         zIndex: 100000,
-        borderRadius: "50%",
-        border: "1px solid",
+        border: "1.5px solid",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         overflow: "hidden",
-        mixBlendMode: "normal",
         willChange: "transform, width, height",
         opacity: isVisible ? 1 : 0,
         transition: "opacity 0.2s ease",
       }}
-      animate={getCursorVariants()}
-      transition={{ type: "spring", stiffness: 500, damping: 30, mass: 0.2 }}
+      animate={{
+        ...getCursorSize(),
+        ...getCursorStyle(),
+      }}
+      transition={{ type: "spring", stiffness: 500, damping: 28, mass: 0.15 }}
     >
       {hoverState === "view" && (
         <motion.span

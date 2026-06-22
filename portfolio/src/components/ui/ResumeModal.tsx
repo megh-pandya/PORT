@@ -4,15 +4,17 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { X, Download, FileText, Briefcase, GraduationCap } from "lucide-react";
 
-interface ResumeModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
+export function ResumeModal() {
+  const [isOpen, setIsOpen] = useState(false);
   const motionScale = useMotionValue(80);
   const springScale = useSpring(motionScale, { damping: 25, stiffness: 100, mass: 0.8 });
   const [scaleVal, setScaleVal] = useState(80);
+
+  useEffect(() => {
+    const handleOpen = () => setIsOpen(true);
+    window.addEventListener("open-resume", handleOpen);
+    return () => window.removeEventListener("open-resume", handleOpen);
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -80,7 +82,7 @@ export function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
               padding: "24px",
               perspective: "1200px", // Enables 3D perspective depth
             }}
-            onClick={onClose}
+            onClick={() => setIsOpen(false)}
           >
             {/* Folded Paper Unfolding Card */}
             <motion.div
@@ -152,7 +154,7 @@ export function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "16px", pointerEvents: "auto" }}>
                   <a
-                    href="/Megh_Pandya_Resume.pdf"
+                    href="/resume.pdf"
                     download
                     style={{
                       display: "flex",
@@ -180,7 +182,7 @@ export function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
                     <span>Download</span>
                   </a>
                   <button
-                    onClick={onClose}
+                    onClick={() => setIsOpen(false)}
                     style={{
                       border: "none",
                       background: "none",
@@ -218,92 +220,70 @@ export function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
                   <h1
                     className="font-serif"
                     style={{
-                      fontSize: "clamp(32px, 5vw, 44px)",
-                      fontWeight: 400,
+                      fontSize: "clamp(28px, 4vw, 36px)",
+                      fontWeight: 700,
                       color: "var(--text)",
                       lineHeight: 1.1,
                       margin: "0 0 8px 0",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.02em",
                     }}
                   >
-                    Megh Pandya
+                    MEGH GOPALBHAI PANDYA
                   </h1>
                   <p
                     style={{
                       fontFamily: "var(--font-mono)",
-                      fontSize: "12px",
+                      fontSize: "13px",
                       color: "var(--accent)",
                       margin: "0 0 16px 0",
-                      letterSpacing: "0.05em",
-                      textTransform: "uppercase",
                       fontWeight: 600,
                     }}
                   >
-                    Full Stack Developer
+                    Full Stack Developer · Next.js · React.js · Node.js · PHP · PostgreSQL
                   </p>
                   <div
                     style={{
                       display: "flex",
                       flexWrap: "wrap",
-                      gap: "16px",
-                      fontSize: "13px",
+                      gap: "12px",
+                      fontSize: "12px",
                       color: "var(--text-sec)",
                       fontFamily: "var(--font-mono)",
                     }}
                   >
+                    <span>+91 9726396207</span>
+                    <span>·</span>
                     <span>meghpandya7788@gmail.com</span>
                     <span>·</span>
-                    <a href="https://linkedin.com/in/megh17" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "none", borderBottom: "1px solid var(--border)" }}>
-                      linkedin.com/in/megh17
-                    </a>
+                    <a href="https://linkedin.com/in/megh17" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "none" }}>linkedin.com/in/megh17</a>
                     <span>·</span>
-                    <a href="https://github.com/megh17" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "none", borderBottom: "1px solid var(--border)" }}>
-                      github.com/megh17
-                    </a>
+                    <a href="https://github.com/megh-pandya" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "none" }}>github.com/megh-pandya</a>
+                    <span>·</span>
+                    <a href="https://megh-portfolio-ten.vercel.app" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "none" }}>megh-portfolio-ten.vercel.app</a>
                   </div>
                 </div>
 
                 <div style={{ height: "1px", backgroundColor: "var(--border)" }} />
 
-                {/* Section: Work Experience */}
+                {/* Section: Profile Summary */}
                 <div>
                   <h2
                     style={{
                       fontFamily: "var(--font-mono)",
-                      fontSize: "11px",
+                      fontSize: "12px",
                       letterSpacing: "0.1em",
                       textTransform: "uppercase",
                       color: "var(--text-muted)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                      margin: "0 0 20px 0",
+                      margin: "0 0 12px 0",
+                      fontWeight: 600,
                     }}
                   >
-                    <Briefcase size={12} style={{ color: "var(--accent)" }} />
-                    Professional Experience
+                    Profile Summary
                   </h2>
-
-                  <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-                    <div>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "8px", marginBottom: "4px" }}>
-                        <h3 style={{ fontSize: "16px", fontWeight: 700, margin: 0, color: "var(--text)" }}>
-                          Full Stack Developer Intern
-                        </h3>
-                        <span style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--text-muted)" }}>
-                          Dec 2025 – Apr 2026
-                        </span>
-                      </div>
-                      <p style={{ fontSize: "14px", color: "var(--accent)", fontWeight: 500, margin: "0 0 12px 0", fontFamily: "var(--font-mono)" }}>
-                        Seaneb Technologies
-                      </p>
-                      <ul style={{ paddingLeft: "16px", margin: 0, display: "flex", flexDirection: "column", gap: "6px", fontSize: "14px", color: "var(--text-sec)", lineHeight: 1.5 }}>
-                        <li>Built property listing, dashboard, and user profile modules for a live property platform.</li>
-                        <li>Integrated 10+ REST APIs covering authentication, analytics, subscription plans, and property data.</li>
-                        <li>Optimized Core Web Vitals via lazy loading, dynamic imports, and Next.js SSR strategies.</li>
-                        <li>Refactored shared UI components, reducing code duplication across dashboards by ~40%.</li>
-                      </ul>
-                    </div>
-                  </div>
+                  <p style={{ fontSize: "14px", color: "var(--text)", lineHeight: 1.6, margin: 0 }}>
+                    Full Stack Developer who shipped production modules for a live real estate SaaS platform serving active business clients — integrating 10+ REST APIs, cutting duplicate code by ~40%, and improving Core Web Vitals scores. Experienced across the full stack with Next.js, React.js, React Native, Node.js, PHP, and PostgreSQL, covering web and mobile development. Strong focus on clean architecture, reusable component design, and delivering measurable results.
+                  </p>
                 </div>
 
                 <div style={{ height: "1px", backgroundColor: "var(--border)" }} />
@@ -313,54 +293,43 @@ export function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
                   <h2
                     style={{
                       fontFamily: "var(--font-mono)",
-                      fontSize: "11px",
+                      fontSize: "12px",
                       letterSpacing: "0.1em",
                       textTransform: "uppercase",
                       color: "var(--text-muted)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                      margin: "0 0 20px 0",
+                      margin: "0 0 16px 0",
+                      fontWeight: 600,
                     }}
                   >
-                    <GraduationCap size={12} style={{ color: "var(--accent)" }} />
                     Education
                   </h2>
 
-                  <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-                    {/* Postgraduate */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
                     <div>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "8px", marginBottom: "4px" }}>
-                        <h3 style={{ fontSize: "16px", fontWeight: 700, margin: 0, color: "var(--text)" }}>
+                        <h3 style={{ fontSize: "15px", fontWeight: 700, margin: 0, color: "var(--text)" }}>
                           Master of Computer Application (MCA)
                         </h3>
                         <span style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--text-muted)" }}>
-                          2024 – 2026
+                          2024 – 2026 (Expected)
                         </span>
                       </div>
-                      <p style={{ fontSize: "14px", color: "var(--text-sec)", margin: "0 0 8px 0" }}>
-                        ISTAR — CVM University
-                      </p>
-                      <p style={{ fontSize: "13px", fontFamily: "var(--font-mono)", color: "var(--accent)", margin: 0 }}>
-                        CGPA: 8.53 (SEM-1: 7.50 · SEM-2: 8.40 · SEM-3: 8.70)
+                      <p style={{ fontSize: "14px", color: "var(--text-sec)", margin: 0 }}>
+                        ISTAR – CVM University | CGPA: 8.53
                       </p>
                     </div>
 
-                    {/* Undergraduate */}
                     <div>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "8px", marginBottom: "4px" }}>
-                        <h3 style={{ fontSize: "16px", fontWeight: 700, margin: 0, color: "var(--text)" }}>
+                        <h3 style={{ fontSize: "15px", fontWeight: 700, margin: 0, color: "var(--text)" }}>
                           Bachelor of Computer Application (BCA)
                         </h3>
                         <span style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--text-muted)" }}>
                           2020 – 2023
                         </span>
                       </div>
-                      <p style={{ fontSize: "14px", color: "var(--text-sec)", margin: "0 0 8px 0" }}>
-                        SEMCOM — CVM University
-                      </p>
-                      <p style={{ fontSize: "13px", fontFamily: "var(--font-mono)", color: "var(--accent)", margin: 0 }}>
-                        CGPA: 8.32
+                      <p style={{ fontSize: "14px", color: "var(--text-sec)", margin: 0 }}>
+                        SEMCOM – CVM University | CGPA: 8.32
                       </p>
                     </div>
                   </div>
@@ -368,39 +337,193 @@ export function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
 
                 <div style={{ height: "1px", backgroundColor: "var(--border)" }} />
 
-                {/* Section: Technical Stack */}
+                {/* Section: Technical Skills */}
                 <div>
                   <h2
                     style={{
                       fontFamily: "var(--font-mono)",
-                      fontSize: "11px",
+                      fontSize: "12px",
                       letterSpacing: "0.1em",
                       textTransform: "uppercase",
                       color: "var(--text-muted)",
                       margin: "0 0 16px 0",
+                      fontWeight: 600,
                     }}
                   >
-                    Skills Ecosystem
+                    Technical Skills
                   </h2>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-                    {["Next.js", "React.js", "Tailwind CSS", "TypeScript", "Node.js", "Express.js", "PHP", "MySQL", "PostgreSQL", "REST APIs", "Git", "Docker"].map((skill) => (
-                      <span
-                        key={skill}
-                        style={{
-                          padding: "6px 12px",
-                          borderRadius: "4px",
-                          border: "1px solid var(--border)",
-                          background: "var(--surface-alt)",
-                          fontSize: "12px",
-                          color: "var(--text)",
-                          fontFamily: "var(--font-mono)",
-                        }}
-                      >
-                        {skill}
-                      </span>
-                    ))}
+                  <div style={{ display: "grid", gridTemplateColumns: "120px 1fr", gap: "8px", fontSize: "13px" }}>
+                    <div style={{ fontWeight: 600, color: "var(--text)" }}>Primary Stack</div>
+                    <div style={{ color: "var(--text-sec)" }}>Next.js, React.js, React Native, Node.js, Express.js, PHP, PostgreSQL</div>
+                    
+                    <div style={{ fontWeight: 600, color: "var(--text)" }}>Proficient</div>
+                    <div style={{ color: "var(--text-sec)" }}>JavaScript (ES6+)</div>
+                    
+                    <div style={{ fontWeight: 600, color: "var(--text)" }}>Familiar</div>
+                    <div style={{ color: "var(--text-sec)" }}>Python, Java, C++</div>
+                    
+                    <div style={{ fontWeight: 600, color: "var(--text)" }}>Frontend</div>
+                    <div style={{ color: "var(--text-sec)" }}>HTML5, CSS3, Tailwind CSS, Bootstrap, REST APIs, AJAX</div>
+                    
+                    <div style={{ fontWeight: 600, color: "var(--text)" }}>Databases</div>
+                    <div style={{ color: "var(--text-sec)" }}>PostgreSQL, MongoDB, MySQL</div>
+                    
+                    <div style={{ fontWeight: 600, color: "var(--text)" }}>Tools</div>
+                    <div style={{ color: "var(--text-sec)" }}>Git, GitHub, VS Code, Postman, phpMyAdmin, Vercel</div>
+                    
+                    <div style={{ fontWeight: 600, color: "var(--text)" }}>Concepts</div>
+                    <div style={{ color: "var(--text-sec)" }}>OOP, DSA, MVC, Responsive Design, API Integration, Performance Optimisation</div>
+                    
+                    <div style={{ fontWeight: 600, color: "var(--text)" }}>Exploring</div>
+                    <div style={{ color: "var(--text-sec)" }}>TypeScript, Docker, AWS basics</div>
                   </div>
                 </div>
+
+                <div style={{ height: "1px", backgroundColor: "var(--border)" }} />
+
+                {/* Section: Experience */}
+                <div>
+                  <h2
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: "12px",
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      color: "var(--text-muted)",
+                      margin: "0 0 16px 0",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Experience
+                  </h2>
+                  <div>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "8px", marginBottom: "4px" }}>
+                      <h3 style={{ fontSize: "15px", fontWeight: 700, margin: 0, color: "var(--text)" }}>
+                        Full Stack Developer Intern | Seaneb Technologies
+                      </h3>
+                      <span style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--text-muted)" }}>
+                        Dec 2025 – Apr 2026
+                      </span>
+                    </div>
+                    <p style={{ fontSize: "12px", fontFamily: "var(--font-mono)", color: "var(--accent)", margin: "0 0 12px 0" }}>
+                      Next.js · React.js · Tailwind CSS · REST APIs · MySQL · Git
+                    </p>
+                    <ul style={{ paddingLeft: "16px", margin: 0, display: "flex", flexDirection: "column", gap: "8px", fontSize: "13px", color: "var(--text-sec)", lineHeight: 1.6 }}>
+                      <li>Built and shipped property listing, dashboard, and user-profile modules for a live Next.js platform serving active business clients.</li>
+                      <li>Reduced perceived page-load time by implementing lazy loading, dynamic imports, and SSR strategies in Next.js — improving Core Web Vitals scores.</li>
+                      <li>Integrated 10+ REST APIs for real-time property data, authentication, plan management, and analytics.</li>
+                      <li>Refactored shared UI components into a reusable library, cutting duplicate code by ~40% and accelerating feature delivery across modules.</li>
+                      <li>Resolved production bugs under live-traffic conditions using Git branching and structured code-review workflows.</li>
+                      <li>Improved mobile responsiveness across all modules with Tailwind CSS, achieving consistent UX on all screen sizes.</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div style={{ height: "1px", backgroundColor: "var(--border)" }} />
+
+                {/* Section: Portfolio & Projects */}
+                <div>
+                  <h2
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: "12px",
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      color: "var(--text-muted)",
+                      margin: "0 0 16px 0",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Projects
+                  </h2>
+                  
+                  <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+                    
+                    {/* Project: Seaneb */}
+                    <div>
+                      <h3 style={{ fontSize: "15px", fontWeight: 700, margin: "0 0 4px 0", color: "var(--text)" }}>
+                        Seaneb Real Estate Platform
+                      </h3>
+                      <p style={{ fontSize: "12px", fontFamily: "var(--font-mono)", color: "var(--accent)", margin: "0 0 6px 0" }}>
+                        Next.js · React.js · Tailwind CSS · REST APIs · MySQL
+                      </p>
+                      <div style={{ fontSize: "12px", color: "var(--text-muted)", marginBottom: "8px" }}>
+                        Live: <a href="https://seaneb.com" target="_blank" rel="noopener noreferrer" style={{ color: "inherit" }}>seaneb.com</a> | GitHub: <a href="https://github.com/megh-pandya/SEANEB-REAL-ESTATE-1" target="_blank" rel="noopener noreferrer" style={{ color: "inherit" }}>github.com/megh-pandya/SEANEB-REAL-ESTATE-1</a>
+                      </div>
+                      <p style={{ fontSize: "13px", color: "var(--text)", fontWeight: 500, margin: "0 0 8px 0" }}>
+                        Live multi-role web platform for property search, listing management, and business operations
+                      </p>
+                      <ul style={{ paddingLeft: "16px", margin: 0, display: "flex", flexDirection: "column", gap: "6px", fontSize: "13px", color: "var(--text-sec)", lineHeight: 1.5 }}>
+                        <li>Developed interactive dashboards with real-time data refresh and role-based access control for clients, agents, and admins.</li>
+                        <li>Implemented optimised routing and rendering patterns that reduced navigation time and improved overall page performance.</li>
+                        <li>Achieved consistent responsive layouts across all device sizes using Tailwind CSS utility-first approach.</li>
+                      </ul>
+                    </div>
+
+                    {/* Project: Attendance */}
+                    <div>
+                      <h3 style={{ fontSize: "15px", fontWeight: 700, margin: "0 0 4px 0", color: "var(--text)" }}>
+                        Attendance Management System
+                      </h3>
+                      <p style={{ fontSize: "12px", fontFamily: "var(--font-mono)", color: "var(--accent)", margin: "0 0 6px 0" }}>
+                        PHP · MySQL · phpMyAdmin
+                      </p>
+                      <p style={{ fontSize: "13px", color: "var(--text)", fontWeight: 500, margin: "0 0 8px 0" }}>
+                        Full-featured web application automating attendance tracking for Admin, Faculty, and Student roles
+                      </p>
+                      <ul style={{ paddingLeft: "16px", margin: 0, display: "flex", flexDirection: "column", gap: "6px", fontSize: "13px", color: "var(--text-sec)", lineHeight: 1.5 }}>
+                        <li>Built secure role-based login and access control with separate dashboards for all three user types.</li>
+                        <li>Developed report generation, student data management, and daily-use export modules consumed by faculty.</li>
+                        <li>Optimised MySQL queries with proper indexing, reducing average query response time and ensuring data integrity.</li>
+                      </ul>
+                    </div>
+
+                    {/* Project: UNO */}
+                    <div>
+                      <h3 style={{ fontSize: "15px", fontWeight: 700, margin: "0 0 4px 0", color: "var(--text)" }}>
+                        UNO
+                      </h3>
+                      <p style={{ fontSize: "12px", fontFamily: "var(--font-mono)", color: "var(--accent)", margin: "0 0 6px 0" }}>
+                        React Native · JavaScript · Android · iOS
+                      </p>
+                      <div style={{ fontSize: "12px", color: "var(--text-muted)", marginBottom: "8px" }}>
+                        GitHub: <a href="https://github.com/megh-pandya/UNO" target="_blank" rel="noopener noreferrer" style={{ color: "inherit" }}>github.com/megh-pandya/UNO</a>
+                      </div>
+                      <p style={{ fontSize: "13px", color: "var(--text)", fontWeight: 500, margin: "0 0 8px 0" }}>
+                        Multiplayer UNO card game with AI opponent, real-time friend play, and full rule implementation
+                      </p>
+                      <ul style={{ paddingLeft: "16px", margin: 0, display: "flex", flexDirection: "column", gap: "6px", fontSize: "13px", color: "var(--text-sec)", lineHeight: 1.5 }}>
+                        <li>Built a cross-platform UNO card game for Android and iOS using React Native, supporting multiplayer and AI opponent modes.</li>
+                        <li>Implemented AI/computer opponent logic and real-time friend multiplayer, giving users flexible play options from a single app.</li>
+                        <li>Designed complete game state management — card dealing, turn handling, special cards, and win conditions — with smooth, responsive UI.</li>
+                        <li>Structured with modular component architecture using React Native hooks and navigation for clean, scalable code.</li>
+                      </ul>
+                    </div>
+
+                    {/* Project: Portfolio */}
+                    <div>
+                      <h3 style={{ fontSize: "15px", fontWeight: 700, margin: "0 0 4px 0", color: "var(--text)" }}>
+                        Personal Web Portfolio
+                      </h3>
+                      <p style={{ fontSize: "12px", fontFamily: "var(--font-mono)", color: "var(--accent)", margin: "0 0 6px 0" }}>
+                        Next.js · React.js · Tailwind CSS · Framer Motion
+                      </p>
+                      <div style={{ fontSize: "12px", color: "var(--text-muted)", marginBottom: "8px" }}>
+                        Live: <a href="https://megh-portfolio-ten.vercel.app" target="_blank" rel="noopener noreferrer" style={{ color: "inherit" }}>megh-portfolio-ten.vercel.app</a> | GitHub: <a href="https://github.com/megh-pandya/portfolio" target="_blank" rel="noopener noreferrer" style={{ color: "inherit" }}>github.com/megh-pandya/portfolio</a>
+                      </div>
+                      <p style={{ fontSize: "13px", color: "var(--text)", fontWeight: 500, margin: "0 0 8px 0" }}>
+                        Premium, highly animated, and interactive personal portfolio platform
+                      </p>
+                      <ul style={{ paddingLeft: "16px", margin: 0, display: "flex", flexDirection: "column", gap: "6px", fontSize: "13px", color: "var(--text-sec)", lineHeight: 1.5 }}>
+                        <li>Built a standout digital presence using Next.js to demonstrate advanced frontend capabilities.</li>
+                        <li>Engineered complex animations using Framer Motion, including a 3D folded-paper resume modal, floating digital constellations, and custom page loaders.</li>
+                        <li>Developed highly performant, custom interactive canvas elements like dynamic night skies and cursor spotlight effects.</li>
+                      </ul>
+                    </div>
+                    
+                  </div>
+                </div>
+
               </div>
             </motion.div>
           </motion.div>

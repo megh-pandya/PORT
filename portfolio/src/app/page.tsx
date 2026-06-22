@@ -9,8 +9,9 @@ import { TechArsenal } from "@/components/sections/TechArsenal";
 import { Journey } from "@/components/sections/Journey";
 import { Contact } from "@/components/sections/Contact";
 import { CommandPalette } from "@/components/ui/CommandPalette";
-import { CursorSpotlight } from "@/components/ui/CursorSpotlight";
-import { CustomCursor } from "@/components/ui/CustomCursor";
+import { NightSkyBackground } from "@/components/ui/NightSkyBackground";
+import { MagneticCursor } from "@/components/ui/MagneticCursor";
+import { FilmGrain } from "@/components/ui/FilmGrain";
 import { ScrollTracker } from "@/components/ui/ScrollTracker";
 import { PageLoader } from "@/components/ui/PageLoader";
 import { ResumeModal } from "@/components/ui/ResumeModal";
@@ -20,30 +21,32 @@ import { ThemeProvider } from "@/context/ThemeContext";
 
 export default function Home() {
   const { isOpen, open, close } = useCommandPalette();
-  const [isResumeOpen, setIsResumeOpen] = useState(false);
 
   return (
     <ThemeProvider>
       {/* Premium Loader Sequence */}
       <PageLoader />
 
-      {/* Trailing cursor overlay */}
-      <CustomCursor />
+      {/* Night Sky Background (Behind everything) */}
+      <NightSkyBackground />
 
-      {/* Background spotlight — desktop only */}
-      <CursorSpotlight />
+      {/* Trailing cursor overlay */}
+      <MagneticCursor />
+
+      {/* Animated film grain overlay */}
+      <FilmGrain />
 
       {/* Sticky Scroll Progress Tracker */}
       <ScrollTracker />
 
       {/* Interactive Unfolding Resume Modal */}
-      <ResumeModal isOpen={isResumeOpen} onClose={() => setIsResumeOpen(false)} />
+      <ResumeModal />
 
       {/* Global command palette overlay */}
       <CommandPalette isOpen={isOpen} onClose={close} />
 
       {/* Navigation */}
-      <Navbar onOpenCommandPalette={open} onResumeClick={() => setIsResumeOpen(true)} />
+      <Navbar onOpenCommandPalette={open} />
 
       {/* Page sections */}
       <main style={{ paddingTop: "60px", overflowX: "hidden" }}>
@@ -64,7 +67,7 @@ export default function Home() {
         </FocusSection>
         
         <FocusSection>
-          <Contact onResumeClick={() => setIsResumeOpen(true)} />
+          <Contact />
         </FocusSection>
       </main>
 

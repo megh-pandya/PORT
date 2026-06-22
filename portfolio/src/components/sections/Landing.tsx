@@ -1,14 +1,115 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import { MagneticButton } from "@/components/ui/MagneticButton";
+import { ArrowRight, Download } from "lucide-react";
 
+// ── CTA Button ────────────────────────────────────────────
+function CtaButton({
+  onClick,
+  href,
+  children,
+  variant = "primary",
+}: {
+  onClick?: () => void;
+  href?: string;
+  children: React.ReactNode;
+  variant?: "primary" | "secondary";
+}) {
+  const base: React.CSSProperties = {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "10px",
+    padding: "13px 26px",
+    borderRadius: "8px",
+    fontSize: "14px",
+    fontWeight: 600,
+    letterSpacing: "0.02em",
+    cursor: "pointer",
+    border: "1px solid",
+    textDecoration: "none",
+    transition: "background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s",
+    whiteSpace: "nowrap",
+  };
+  const primary: React.CSSProperties = {
+    ...base,
+    backgroundColor: "var(--text)",
+    color: "var(--bg)",
+    borderColor: "var(--text)",
+  };
+  const secondary: React.CSSProperties = {
+    ...base,
+    backgroundColor: "transparent",
+    color: "var(--text)",
+    borderColor: "var(--border)",
+  };
+  const style = variant === "primary" ? primary : secondary;
+
+  const handleEnter = (e: React.MouseEvent<HTMLElement>) => {
+    const el = e.currentTarget as HTMLElement;
+    if (variant === "primary") {
+      el.style.backgroundColor = "var(--accent)";
+      el.style.borderColor = "var(--accent)";
+    } else {
+      el.style.borderColor = "var(--accent)";
+      el.style.color = "var(--accent)";
+    }
+    el.style.transform = "translateY(-1px)";
+  };
+  const handleLeave = (e: React.MouseEvent<HTMLElement>) => {
+    const el = e.currentTarget as HTMLElement;
+    if (variant === "primary") {
+      el.style.backgroundColor = "var(--text)";
+      el.style.borderColor = "var(--text)";
+      el.style.color = "var(--bg)";
+    } else {
+      el.style.borderColor = "var(--border)";
+      el.style.color = "var(--text)";
+    }
+    el.style.transform = "translateY(0)";
+  };
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        target={href.startsWith("http") || href.endsWith(".pdf") ? "_blank" : undefined}
+        rel="noopener noreferrer"
+        style={style}
+        onMouseEnter={handleEnter}
+        onMouseLeave={handleLeave}
+      >
+        {children}
+      </a>
+    );
+  }
+  return (
+    <button style={style} onClick={onClick} onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
+      {children}
+    </button>
+  );
+}
+
+// ── Landing section ───────────────────────────────────────
 export function Landing() {
+  const [introSeen, setIntroSeen] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const seen = sessionStorage.getItem("portfolio_intro_seen_v2");
+      setIntroSeen(!!seen);
+    }
+  }, []);
+
   const scrollToProjects = () => {
     document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
   };
+
+  // Content appears after intro shatter OR immediately if session already seen
+  // Wait longer if the intro hasn't been seen yet
+  const baseDelay = introSeen ? 0.2 : 0.8;
+
+  const name = "Megh Pandya";
 
   return (
     <section
@@ -23,38 +124,6 @@ export function Landing() {
         overflow: "hidden",
       }}
     >
-      {/* Subtle background texture lines */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          inset: 0,
-          backgroundImage:
-            "linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px)",
-          backgroundSize: "80px 80px",
-          opacity: 0.35,
-          zIndex: 0,
-          pointerEvents: "none",
-        }}
-      />
-
-      {/* Warm orb */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          top: "30%",
-          right: "10%",
-          width: "480px",
-          height: "480px",
-          borderRadius: "50%",
-          background:
-            "radial-gradient(circle, rgba(196,106,61,0.08) 0%, transparent 70%)",
-          zIndex: 0,
-          pointerEvents: "none",
-        }}
-      />
-
       <div
         style={{
           maxWidth: "900px",
@@ -64,170 +133,149 @@ export function Landing() {
           zIndex: 2,
         }}
       >
-        {/* Index number */}
+        {/* Eyebrow */}
         <motion.p
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.9, delay: baseDelay, ease: [0.22, 1, 0.36, 1] }}
           style={{
             fontFamily: "var(--font-mono)",
             fontSize: "12px",
             color: "var(--accent)",
-            letterSpacing: "0.12em",
+            letterSpacing: "0.14em",
             marginBottom: "28px",
             textTransform: "uppercase",
           }}
         >
-          MEGH.DEV - FULL STACK DEVELOPER
+          MEGH.DEV · FULL STACK DEVELOPER
         </motion.p>
 
-        {/* Name — large editorial serif */}
+        {/* Name (Stagger in letters from bottom) */}
         <h1
           className="font-serif"
           style={{
-            fontSize: "clamp(52px, 9vw, 120px)",
+            fontSize: "clamp(52px, 9vw, 118px)",
             lineHeight: 1.0,
-            fontWeight: 400,
+            fontWeight: 700,
             color: "var(--text)",
-            marginBottom: "16px",
-            letterSpacing: "-0.02em",
+            marginBottom: "18px",
+            letterSpacing: "-0.025em",
+            display: "flex",
+            flexWrap: "wrap",
+            overflow: "hidden",
           }}
         >
-          <span className="mask-text-wrapper">
+          {name.split("").map((char, index) => (
             <motion.span
-              className="mask-text-line"
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              transition={{ duration: 1.4, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              key={index}
+              initial={{ y: "100%", opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{
+                duration: 0.8,
+                delay: baseDelay + index * 0.05,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              style={{ display: "inline-block", whiteSpace: char === " " ? "pre" : "normal" }}
             >
-              Megh Pandya
+              {char}
             </motion.span>
-          </span>
+          ))}
         </h1>
 
-        {/* Role */}
-        <div style={{ marginBottom: "32px" }}>
-          <span className="mask-text-wrapper">
-            <motion.p
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              transition={{ duration: 1.2, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              style={{
-                fontSize: "clamp(16px, 2.4vw, 22px)",
-                color: "var(--text-sec)",
-                fontWeight: 400,
-                letterSpacing: "0.01em",
-                margin: 0,
-              }}
-            >
-              Full Stack Developer
-            </motion.p>
-          </span>
+        {/* Role (Fades in after name completes) */}
+        <div style={{ marginBottom: "20px", overflow: "hidden" }}>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.1, delay: baseDelay + (name.length * 0.05) + 0.2, ease: "easeOut" }}
+            style={{
+              fontSize: "clamp(17px, 2.6vw, 24px)",
+              color: "var(--text-sec)",
+              fontWeight: 400,
+              letterSpacing: "0.01em",
+              margin: 0,
+            }}
+          >
+            Full Stack Developer
+          </motion.p>
         </div>
 
-        {/* Divider */}
-        <motion.div
-          initial={{ scaleX: 0, originX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 1.5, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          style={{
-            height: "1px",
-            backgroundColor: "var(--border)",
-            marginBottom: "32px",
-            maxWidth: "560px",
-          }}
-        />
-
-        {/* Mission statement */}
-        <div style={{ marginBottom: "52px", maxWidth: "520px" }}>
-          <span className="mask-text-wrapper" style={{ display: "block" }}>
-            <motion.p
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              transition={{ duration: 1.2, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              style={{
-                fontSize: "clamp(15px, 1.8vw, 18px)",
-                color: "var(--text-sec)",
-                lineHeight: 1.65,
-                margin: 0,
-              }}
-            >
-              Building practical web systems — production dashboards, REST API
-              integrations, and full stack features that work reliably under real
-              traffic.
-            </motion.p>
-          </span>
-        </div>
-
-        {/* CTA */}
+        {/* Description (Slides up after role) */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.8, delay: baseDelay + (name.length * 0.05) + 0.5, ease: [0.22, 1, 0.36, 1] }}
+          style={{ marginBottom: "48px", maxWidth: "500px" }}
         >
-          <MagneticButton
-            onClick={scrollToProjects}
-            className="landing-cta"
-            strength={0.25}
+          {/* Divider */}
+          <div
+            style={{
+              height: "1px",
+              backgroundColor: "var(--border)",
+              marginBottom: "24px",
+              maxWidth: "440px",
+            }}
+          />
+          <p
+            style={{
+              fontSize: "clamp(15px, 1.8vw, 18px)",
+              color: "var(--text-sec)",
+              lineHeight: 1.65,
+              margin: 0,
+            }}
           >
-            <span
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "10px",
-                padding: "14px 28px",
-                backgroundColor: "var(--text)",
-                color: "var(--bg)",
-                borderRadius: "6px",
-                fontSize: "14px",
-                fontWeight: 600,
-                letterSpacing: "0.02em",
-                cursor: "pointer",
-                border: "none",
-                transition: "background 0.2s, transform 0.2s",
-              }}
-              onMouseEnter={(e) =>
-                ((e.currentTarget as HTMLElement).style.backgroundColor =
-                  "var(--accent)")
-              }
-              onMouseLeave={(e) =>
-                ((e.currentTarget as HTMLElement).style.backgroundColor =
-                  "var(--text)")
-              }
-            >
-              View Projects
-              <ArrowRight size={16} />
-            </span>
-          </MagneticButton>
+            Building production-grade web and mobile systems.
+          </p>
+        </motion.div>
+
+        {/* CTAs (Scale in with spring bounce) */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ 
+            type: "spring", 
+            stiffness: 200, 
+            damping: 15,
+            delay: baseDelay + (name.length * 0.05) + 0.8
+          }}
+          style={{ display: "flex", gap: "14px", flexWrap: "wrap", alignItems: "center" }}
+        >
+          <CtaButton onClick={scrollToProjects} variant="primary">
+            View Projects <ArrowRight size={16} />
+          </CtaButton>
+          <CtaButton
+            onClick={(e) => {
+              if (e) e.preventDefault();
+              window.dispatchEvent(new CustomEvent('open-resume'));
+            }}
+            variant="secondary"
+          >
+            Download Resume <Download size={15} />
+          </CtaButton>
         </motion.div>
 
         {/* Scroll hint */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1.2, delay: 1.5, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 1.2, delay: baseDelay + 2.0, ease: "easeOut" }}
           style={{
             position: "absolute",
-            bottom: "-80px",
+            bottom: "-90px",
             left: 0,
-            fontSize: "11px",
+            fontSize: "10px",
             color: "var(--text-muted)",
-            letterSpacing: "0.1em",
+            letterSpacing: "0.12em",
             textTransform: "uppercase",
             fontFamily: "var(--font-mono)",
             display: "flex",
             alignItems: "center",
-            gap: "8px",
+            gap: "10px",
           }}
         >
           <span>Scroll to explore</span>
           <span
-            style={{
-              display: "block",
-              width: "24px",
-              height: "1px",
-              backgroundColor: "var(--text-muted)",
-            }}
+            style={{ display: "block", width: "28px", height: "1px", backgroundColor: "var(--text-muted)" }}
           />
         </motion.p>
       </div>

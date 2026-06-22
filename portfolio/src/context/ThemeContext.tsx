@@ -26,8 +26,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // Load from localStorage on mount
   useEffect(() => {
     const stored = localStorage.getItem("megh-theme") as Theme | null;
-    const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
-    const initial = stored ?? (prefersLight ? "light" : "dark");
+    const initial = stored ?? "dark";
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setTheme(initial);
     document.documentElement.setAttribute("data-theme", initial);

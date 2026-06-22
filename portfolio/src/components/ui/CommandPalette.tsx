@@ -72,7 +72,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
       label: "Download Resume",
       description: "Open resume PDF in a new tab",
       icon: <FileText size={15} />,
-      action: () => { window.open("/resume.pdf", "_blank"); onClose(); },
+      action: () => { window.dispatchEvent(new CustomEvent('open-resume')); onClose(); },
     },
     {
       id: "contact",
